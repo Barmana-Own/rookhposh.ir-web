@@ -1,0 +1,85 @@
+import type { Metadata, Viewport } from "next";
+import "@fontsource/vazirmatn/400.css";
+import "@fontsource/vazirmatn/500.css";
+import "@fontsource/vazirmatn/600.css";
+import "@fontsource/vazirmatn/700.css";
+import "@fontsource/vazirmatn/800.css";
+import "./globals.css";
+import StructuredData from "@/components/seo/StructuredData";
+import {
+  SITE_DESCRIPTION,
+  SITE_HOMEPAGE_URL,
+  SITE_NAME,
+  SITE_ORIGIN,
+  SITE_URL,
+} from "@/lib/site";
+
+export const metadata: Metadata = {
+  metadataBase: SITE_URL,
+  title: {
+    default: "رخ پوش | پرو مجازی لباس برای فروشگاه‌ها",
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
+  alternates: {
+    canonical: SITE_HOMEPAGE_URL,
+  },
+  authors: [{ name: SITE_NAME, url: SITE_ORIGIN }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
+  category: "technology",
+  applicationName: SITE_NAME,
+  openGraph: {
+    type: "website",
+    locale: "fa_IR",
+    url: SITE_HOMEPAGE_URL,
+    siteName: SITE_NAME,
+    title: "رخ پوش | پرو مجازی لباس برای فروشگاه‌ها",
+    description: SITE_DESCRIPTION,
+    images: [
+      {
+        url: "/images/rookhposh-mark.webp",
+        width: 768,
+        height: 512,
+        alt: "نشان رخ پوش",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "رخ پوش | پرو مجازی لباس برای فروشگاه‌ها",
+    description: SITE_DESCRIPTION,
+    images: ["/images/rookhposh-mark.webp"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0a0a0b",
+  colorScheme: "dark",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="fa" dir="rtl">
+      <body>
+        <StructuredData />
+        {children}
+      </body>
+    </html>
+  );
+}

@@ -1,0 +1,307 @@
+{
+  "project": {
+    "name": "Rookhposh SEO Source-Code Fix",
+    "origin": "https://rookhposh.ir",
+    "language": "fa-IR",
+    "framework": "Next.js 16 App Router",
+    "release": "seo-source-fix-r4-verification-2026-09-26"
+  },
+  "activeStage": "12-fullstack-final-review",
+  "workflowStatus": "complete",
+  "completedStages": [
+    "01-project-analysis-prompt-engineering",
+    "02-design-system-ui-architecture",
+    "03-frontend-architecture",
+    "04-backend-architecture",
+    "05-database-architecture",
+    "06-api-integration",
+    "07-authentication-authorization",
+    "08-application-security",
+    "09-software-testing",
+    "10-qa-debugging",
+    "11-deployment-production",
+    "12-fullstack-final-review"
+  ],
+  "stageStatus": {
+    "01": "PASS",
+    "02": "PASS",
+    "03": "PASS",
+    "04": "PASS_NOT_APPLICABLE",
+    "05": "PASS_NOT_APPLICABLE",
+    "06": "PASS_NOT_APPLICABLE",
+    "07": "PASS_NOT_APPLICABLE",
+    "08": "PASS",
+    "09": "PASS",
+    "10": "PASS",
+    "11": "PASS",
+    "12": "PASS"
+  },
+  "artifacts": [
+    "docs/01-project-brief.md",
+    "docs/01-requirements.md",
+    "docs/02-design-system.md",
+    "docs/02-ui-architecture.md",
+    "design/tokens.json",
+    "docs/03-frontend-architecture.md",
+    "docs/04-backend-architecture.md",
+    "docs/05-database-architecture.md",
+    "docs/06-api-design.md",
+    "docs/07-authentication-authorization.md",
+    "docs/08-security-review.md",
+    "docs/09-test-plan.md",
+    "docs/09-test-results.md",
+    "docs/10-qa-report.md",
+    "docs/10-known-issues.md",
+    "docs/11-deployment.md",
+    "docs/11-operations-runbook.md",
+    "docs/12-final-review.md",
+    "docs/rookhposh-seo-fix-prompts.md",
+    "docs/r1-technical-seo-foundation.md",
+    "docs/r2-before-measurements.md",
+    "docs/r2-performance-rendering-refactor.md",
+    "docs/r3-information-architecture.md",
+    "docs/r4-production-seo-verification.md",
+    "project-integrity-manifest.md",
+    "README.md",
+    "release-manifest.json",
+    "reports/customer-report.fa.md",
+    "reports/customer-report.en.md",
+    "reports/technical-report.fa.md",
+    "reports/technical-report.en.md",
+    "scripts/smoke-seo.mjs",
+    "scripts/validate-r2.mjs",
+    "components/sections/AnimationRuntime.tsx",
+    "components/sections/OctabootExperience.tsx",
+    "components/sections/LoaderSection.tsx",
+    "components/marketing/PublicHeader.tsx",
+    "components/marketing/PublicFooter.tsx",
+    "components/marketing/Breadcrumbs.tsx",
+    "components/marketing/MarketingPageShell.tsx",
+    "components/marketing/PlanCards.tsx",
+    "components/marketing/FaqList.tsx",
+    "components/marketing/StorySteps.tsx",
+    "lib/marketing.ts",
+    "app/for-online-stores/page.tsx",
+    "app/how-it-works/page.tsx",
+    "app/pricing/page.tsx",
+    "app/faq/page.tsx",
+    "app/globals.css",
+    "package.json",
+    "scripts/validate-r3.mjs",
+    "scripts/smoke-r3.mjs",
+    "scripts/smoke-r4.mjs",
+    "public/images/rookhposh-mark.webp"
+  ],
+  "architectureDecisions": [
+    "Use Next.js Metadata API and metadata route conventions rather than manual head tags.",
+    "Keep crawl-critical identity in server-rendered modules while preserving the client animation component.",
+    "Use one validated public-origin helper for canonical, social, sitemap, robots, and JSON-LD URLs.",
+    "Do not invent backend, database, API, or authentication layers for a frontend-only SEO scope.",
+    "Use a dependency-free regression script instead of adding a test dependency for static SEO markers.",
+    "Keep semantic landing-page content in Server Components and isolate canvas/GSAP/ScrollTrigger in a focused Client Component.",
+    "Use a bounded four-worker frame queue with an 18-frame critical window and four-settled-frame readiness threshold.",
+    "Use an additive 768x512 WebP brand asset for static imagery while preserving the legacy PNG until compatibility is audited.",
+    "Treat the homepage as B2B/store-first based on repeated store-facing copy, pricing, and dashboard evidence while preserving current consumer-facing wording pending owner confirmation.",
+    "Create only four distinct factual routes: store use case, workflow, pricing, and FAQ; do not publish thin keyword variants or unapproved legal/consumer pages.",
+    "Use one shared metadata helper, visible breadcrumbs with matching BreadcrumbList JSON-LD, and a route registry as the sitemap source of truth.",
+    "Do not add FAQPage JSON-LD because current Google search appearance guidance does not make regular FAQ rich results a reasonable expectation for this commercial site."
+  ],
+  "assumptions": [
+    "https://rookhposh.ir is the canonical public origin.",
+    "Persian is the only published language in this repository.",
+    "The existing logo asset is the approved brand image until a dedicated social-card asset is supplied.",
+    "The initial browser asset inventory is a tool observation, not a protocol-level request trace.",
+    "The connected browser surface cannot force reduced-motion emulation or provide Lighthouse/field data.",
+    "The connected browser surface cannot force mobile viewport emulation; those checks remain environment-limited."
+  ],
+  "risks": [
+    "Social platforms may crop the existing 1536x1024 logo asset.",
+    "External dashboard, blog, and trust-seal availability is not controlled by this repository.",
+    "Live Search Console/rich-result verification is not available locally.",
+    "The existing 535-frame visual experience remains a large client asset workload by design.",
+    "The R2 JavaScript chunk reduction is intentionally small because static-content decoupling is primarily a rendering and scheduling improvement.",
+    "No field Core Web Vitals or Lighthouse score is available from this environment.",
+    "Homepage intent remains owner-confirmation pending; the implementation does not silently rewrite the current H1 or positioning.",
+    "Approved legal copy and routes remain unavailable, so Terms and Privacy pages are intentionally unpublished.",
+    "The final public route set is intentionally small; additional routes require distinct factual content and owner-approved intent."
+  ],
+  "unresolvedBlockers": [
+    "Live https://rookhposh.ir is serving an older deployment without the R1-R3 metadata, crawl routes, JSON-LD, or four public content routes.",
+    "The live blog host failed DNS resolution during browser verification.",
+    "A protocol-level live HTTP response trace, mobile viewport emulation, and reduced-motion emulation were unavailable in the connected environment."
+  ],
+  "validation": {
+    "npm ci --ignore-scripts": "PASS",
+    "npm ci": "PASS",
+    "npm audit --omit=dev": "PASS",
+    "npm run test:seo": "PASS",
+    "npm run test:r2": "PASS",
+    "npm run test:r3": "PASS",
+    "npm run lint": "PASS",
+    "npm run typecheck": "PASS",
+    "npm run build": "PASS",
+    "local HTTP smoke": "PASS",
+    "R2 browser smoke": "PASS; server-rendered semantics, loader readiness, 36-frame initial observation, FAQ interaction",
+    "R3 route smoke": "PASS; unique metadata, canonical URLs, internal links, sitemap entries, unpublished legal routes",
+    "R3 browser smoke": "PASS; four new content routes, breadcrumbs, page purpose, and FAQ interaction",
+    "npm run test:r4:smoke": "PASS; controlled production build metadata, crawl routes, JSON-LD syntax, internal links, and exact 404",
+    "controlled R4 browser smoke": "PASS; rendered RTL semantics, metadata, JSON-LD, internal links, canvas, and no console errors",
+    "live R4 production verification": "FAIL; live host is an older deployment and does not expose R1-R3 crawl/metadata/routes",
+    "live HTTPS redirect": "PASS; http://rookhposh.ir/ redirected to https://rookhposh.ir/",
+    "live blog host": "FAIL; browser DNS resolution returned ERR_NAME_NOT_RESOLVED",
+    "live dashboard host": "PASS; dashboard page loaded with title and logo",
+    "live mobile viewport": "NOT_RUN; connected browser has no viewport emulation",
+    "live reduced-motion emulation": "NOT_RUN; connected browser has no media-preference emulation",
+    "Lighthouse/field performance data": "NOT_RUN",
+    "R1 metadata/canonical/robots/sitemap/JSON-LD/404 smoke": "PASS",
+    "external blog/legal route availability": "NOT_RUN",
+    "live Search Console/rich-result test": "NOT_RUN",
+    "external deployment": "NOT_PERFORMED"
+  },
+  "r1": {
+    "status": "PASS_WITH_DOCUMENTED_OWNER_INPUT",
+    "phase": "Technical SEO Foundation",
+    "date": {
+      "gregorian": "2026-09-26",
+      "jalali": "۱۴۰۵-۰۷-۰۴"
+    },
+    "validation": {
+      "canonical": "PASS; exactly one rendered https://rookhposh.ir/ canonical",
+      "robots": "PASS",
+      "sitemap": "PASS; homepage only",
+      "structuredData": "PASS; valid Organization/WebSite/Service JSON-LD",
+      "notFound": "PASS; genuine HTTP 404 in production smoke",
+      "footer": "PASS_WITH_DOCUMENTED_OWNER_INPUT; FAQ is local and factual, legal labels are non-interactive pending approved copy/routes",
+      "externalBlog": "NOT_RUN/UNAVAILABLE from current environment"
+    },
+    "ownerInputRequired": [
+      "Approved Terms of Use and Privacy Policy copy and production routes"
+    ],
+    "reworkHistory": [
+      "Smoke test caught root canonical serialization without a trailing slash; enabled trailingSlash and revalidated build/smoke.",
+      "Removed unsupported structured-data areaServed claim and reran validation."
+    ],
+    "artifact": "docs/r1-technical-seo-foundation.md"
+  },
+  "r2": {
+    "status": "PASS_WITH_MEASURED_LIMITATIONS",
+    "phase": "Performance, Rendering and Client-Bundle Refactor",
+    "date": {
+      "gregorian": "2026-09-26",
+      "jalali": "۱۴۰۵-۰۷-۰۴"
+    },
+    "implementation": {
+      "serverClientBoundary": "PASS; semantic landing content is server-rendered and AnimationRuntime is the focused client boundary",
+      "frameLoading": "PASS; bounded queue with four concurrent downloads, 18-frame critical window, 4-settled readiness threshold, and nearby prefetch",
+      "reducedMotion": "PASS_SOURCE_VALIDATION; reduced-motion keeps the static fallback and queues only the poster frame",
+      "fallback": "PASS; server-rendered scene remains readable if JavaScript, canvas, GSAP, or frame loading fails",
+      "brandAsset": "PASS; additive 768x512 WebP is 8,022 bytes; legacy PNG preserved"
+    },
+    "measurements": {
+      "beforeJavaScriptBytes": 699466,
+      "afterJavaScriptBytes": 698459,
+      "afterInitialObservedFrameAssets": 36,
+      "frameCount": 535,
+      "frameBytes": 11423938,
+      "lighthouse": "NOT_RUN",
+      "fieldCoreWebVitals": "NOT_RUN"
+    },
+    "validation": {
+      "npm run test:seo": "PASS",
+      "npm run test:r2": "PASS",
+      "npm run lint": "PASS",
+      "npm run typecheck": "PASS",
+      "npm run build": "PASS; elevated rerun required after sandbox spawn EPERM",
+      "npm run test:seo:smoke": "PASS",
+      "browserSmoke": "PASS; server-rendered semantics, loader readiness, 36-frame initial observation, and FAQ interaction",
+      "reducedMotionBrowserEmulation": "NOT_RUN; unavailable in connected browser surface"
+    },
+    "artifact": "docs/r2-performance-rendering-refactor.md"
+  },
+  "r3": {
+    "status": "PASS_WITH_DOCUMENTED_OWNER_DECISIONS",
+    "phase": "Content, Information Architecture and Internal Links",
+    "date": {
+      "gregorian": "2026-09-26",
+      "jalali": "۱۴۰۵-۰۷-۰۴"
+    },
+    "intent": {
+      "primaryRecommendation": "B2B/store-first homepage intent based on repeated store-facing copy, pricing, and dashboard evidence",
+      "b2cMessaging": "Virtual try-on before purchase and personal image workflow",
+      "sharedMessaging": "Image upload, clothing selection, preview, comparison, and more informed purchase",
+      "ownerDecisionRequired": "Confirm B2B-first positioning, direct-to-consumer availability, legal routes/copy, and the /for-online-stores slug"
+    },
+    "routesCreated": [
+      "/for-online-stores/",
+      "/how-it-works/",
+      "/pricing/",
+      "/faq/"
+    ],
+    "routesNotCreated": {
+      "/virtual-try-on/": "Consumer product/signup details and approved positioning are not established",
+      "/features/": "Would substantially duplicate the workflow and store pages",
+      "/about/": "No approved company narrative was supplied",
+      "/contact/": "Only phone/address facts exist; no distinct contact workflow or content",
+      "/terms/": "Approved binding legal content and route not supplied",
+      "/privacy/": "Approved binding legal content and route not supplied"
+    },
+    "structuredData": "Root Organization/WebSite/Service plus visible BreadcrumbList JSON-LD; no FAQPage schema added",
+    "sitemap": "PASS; five public indexable routes, no legal placeholders, dashboard, blog, redirects, or errors",
+    "validation": {
+      "npm run test:r3": "PASS",
+      "npm run typecheck": "PASS",
+      "npm run lint": "PASS",
+      "npm run build": "PASS; ten static routes generated including four new public pages",
+      "npm run test:seo:smoke": "PASS",
+      "npm run test:r3:smoke": "PASS",
+      "browserSmoke": "PASS; four new routes, breadcrumbs, unique titles, and FAQ interaction"
+    },
+    "artifact": "docs/r3-information-architecture.md"
+  },
+  "r4": {
+    "status": "FAIL_WITH_DEPLOYMENT_BLOCKERS",
+    "phase": "Production SEO Verification",
+    "date": {
+      "gregorian": "2026-09-26",
+      "jalali": "۱۴۰۵-۰۷-۰۴"
+    },
+    "controlledEnvironment": {
+      "build": "PASS",
+      "r4Smoke": "PASS",
+      "r1R3Smoke": "PASS",
+      "browserRenderedMetadata": "PASS",
+      "browserConsole": "PASS; no error or warning entries after load",
+      "mobileViewport": "NOT_RUN; unavailable",
+      "reducedMotion": "NOT_RUN; unavailable"
+    },
+    "liveProduction": {
+      "https": "PASS; http redirected to https",
+      "homepageRendered": "PASS_WITH_STATUS_LIMITATION; browser loaded the homepage",
+      "canonicalHost": "FAIL; live homepage has no canonical tag",
+      "robots": "FAIL; /robots.txt rendered the live 404 page",
+      "sitemap": "FAIL; /sitemap.xml rendered the live 404 page",
+      "openGraphTwitter": "FAIL; live homepage has no social metadata",
+      "jsonLd": "FAIL; live homepage has no JSON-LD",
+      "r3Routes": "FAIL; all four deployed route checks rendered 404",
+      "internalLinks": "FAIL; live page retains hash links and old blog-root footer links",
+      "blog": "FAIL; ERR_NAME_NOT_RESOLVED",
+      "dashboard": "PASS; page loaded with title and logo",
+      "mobile": "NOT_RUN; unavailable",
+      "reducedMotion": "NOT_RUN; unavailable",
+      "networkTrace": "NOT_RUN; protocol-level trace unavailable",
+      "console": "PASS; no error or warning entries after load"
+    },
+    "ownerOrOperatorActionRequired": [
+      "Deploy the verified R1-R3 build to the authorized production target.",
+      "Resolve or explicitly accept the blog DNS failure and recheck the external link.",
+      "Repeat live checks with a protocol-level HTTP client plus mobile and reduced-motion emulation."
+    ],
+    "artifact": "docs/r4-production-seo-verification.md"
+  },
+  "nextStage": "NONE",
+  "projectStatus": "COMPLETE",
+  "STAGE_12_STATUS": "PASS",
+  "WORKFLOW_STATUS": "COMPLETE",
+  "PROJECT_STATUS": "COMPLETE",
+  "NEXT_STAGE": "NONE"
+}
