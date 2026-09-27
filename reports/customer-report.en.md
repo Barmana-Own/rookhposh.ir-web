@@ -7,7 +7,7 @@
 | Language | English |
 | Jalali date | ۱۴۰۵-۰۷-۰۵ |
 | Gregorian date | 2026-09-27 |
-| Repository revision | `4c83de735e1161fbb88277d48cc5eac16d875765` |
+| Implementation revision | `f19b774e883043d7cc6d8707298a96ba95003765` |
 | Branch | `feature/r5-prompt-01-navigation` |
 | Delivery status | Source implementation complete; external deployment not performed |
 
