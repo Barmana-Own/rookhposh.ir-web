@@ -30,6 +30,7 @@ for (const [pathname, expectedStatus] of checks) {
 }
 
 const homepage = responses.get("/") ?? "";
+const notFound = responses.get("/r1-route-that-does-not-exist") ?? "";
 const canonicalMatches = homepage.match(/<link[^>]+rel=["']canonical["'][^>]*>/gi) ?? [];
 const canonicalTag = canonicalMatches[0] ?? "";
 const jsonLdMatch = homepage.match(
@@ -66,6 +67,19 @@ for (const marker of [
 ]) {
   if (!homepage.includes(marker)) {
     failures.push(`/: missing server-rendered R2 content marker ${marker}`);
+  }
+}
+
+for (const marker of [
+  "خطای ۴۰۴",
+  'href="/how-it-works/"',
+  'href="/for-online-stores/"',
+  'href="/pricing/"',
+  'href="/blog/"',
+  'href="/faq/"',
+]) {
+  if (!notFound.includes(marker)) {
+    failures.push(`/r1-route-that-does-not-exist: custom 404 is missing ${marker}`);
   }
 }
 

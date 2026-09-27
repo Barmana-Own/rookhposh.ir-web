@@ -59,14 +59,9 @@ export default function PublicFooter() {
             <Link className="fa-copy" href="/pricing">
               تعرفه‌ها
             </Link>
-            <a
-              className="fa-copy"
-              href="https://blog.rookhposh.ir"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              وبلاگ
-            </a>
+            <Link className="fa-copy" href="/blog">
+              مقالات
+            </Link>
           </div>
         </div>
 

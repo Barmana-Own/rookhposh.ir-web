@@ -13,7 +13,10 @@ const requiredFiles = [
   "components/sections/AnimationRuntime.tsx",
   "components/sections/LoaderSection.tsx",
   "components/marketing/PublicHeader.tsx",
+  "components/marketing/MobileNav.tsx",
   "components/marketing/PublicFooter.tsx",
+  "app/blog/page.tsx",
+  "app/not-found.tsx",
   "lib/site.ts",
   "scripts/smoke-seo.mjs",
 ];
@@ -26,13 +29,18 @@ const requiredSnippets = new Map([
   ["components/sections/OctabootExperience.tsx", ["aria-labelledby=\"journey-title\"", "scene--fallback", "AnimationRuntime", "id=\"faq\""]],
   ["components/sections/AnimationRuntime.tsx", ["\"use client\"", "MAX_CONCURRENT_DOWNLOADS", "prefers-reduced-motion: reduce", "image.onerror", "image.src = \"\""]],
   ["components/sections/LoaderSection.tsx", ["loaderStatus", "role=\"status\"", "rookhposh-mark.webp"]],
-  ["components/marketing/PublicHeader.tsx", ["/how-it-works", "/pricing", "blog.rookhposh.ir", "dash.rookhposh.ir"]],
-  ["components/marketing/PublicFooter.tsx", ["/faq", "/for-online-stores", "aria-disabled=\"true\"", "rookhposh-mark.webp"]],
+  ["components/marketing/PublicHeader.tsx", ["/how-it-works", "/for-online-stores", "/pricing", "/blog", "MobileNav", "dash.rookhposh.ir"]],
+  ["components/marketing/MobileNav.tsx", ["\"use client\"", "aria-expanded", "aria-controls", "Escape", "hidden={!isOpen}"]],
+  ["components/marketing/PublicFooter.tsx", ["/faq", "/for-online-stores", "/blog", "مقالات", "aria-disabled=\"true\"", "rookhposh-mark.webp"]],
+  ["app/blog/page.tsx", ["noindex", "index: false", "Prompt 02"]],
+  ["app/not-found.tsx", ["/how-it-works", "/for-online-stores", "/pricing", "/blog", "/faq", "صفحه مورد نظر پیدا نشد"]],
   ["next.config.ts", ["poweredByHeader: false", "X-Content-Type-Options", "Referrer-Policy"]],
 ]);
 
 const forbiddenSnippets = new Map([
   ["components/sections/OctabootExperience.tsx", ["\"use client\"", "<noscript>"]],
+  ["components/marketing/PublicHeader.tsx", ["blog.rookhposh.ir"]],
+  ["components/marketing/PublicFooter.tsx", ["blog.rookhposh.ir"]],
 ]);
 
 const failures = [];

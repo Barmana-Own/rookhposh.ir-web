@@ -103,13 +103,19 @@ for (const [pathname, expectedTitle] of publicRoutes) {
 const homepage = pages.get("/") ?? "";
 for (const marker of [
   'href="/how-it-works/"',
+  'href="/for-online-stores/"',
   'href="/pricing/"',
   'href="/faq/"',
-  'href="/for-online-stores/"',
+  'href="/blog/"',
+  'href="https://dash.rookhposh.ir"',
 ]) {
   if (!homepage.includes(marker)) {
     failures.push(`/: missing internal link ${marker}`);
   }
+}
+
+if (homepage.includes('href="https://blog.rookhposh.ir"')) {
+  failures.push("/: public navigation still contains the external blog link");
 }
 
 const robotsResult = await fetchPage("/robots.txt", 200);

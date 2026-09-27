@@ -12,6 +12,18 @@ const routeFiles = [
   ["app/faq/page.tsx", "/faq"],
 ];
 
+for (const relativePath of [
+  "components/marketing/MobileNav.tsx",
+  "app/blog/page.tsx",
+  "app/not-found.tsx",
+]) {
+  try {
+    await access(join(root, relativePath));
+  } catch {
+    failures.push(`Missing Prompt 01 file: ${relativePath}`);
+  }
+}
+
 for (const [relativePath, path] of routeFiles) {
   let source;
 
@@ -55,15 +67,51 @@ for (const [source, marker] of [
   [sitemap, "PUBLIC_INDEXABLE_ROUTES"],
   [sitemap, "publicUrl"],
   [header, "/how-it-works"],
+  [header, "/for-online-stores"],
   [header, "/pricing"],
+  [header, "/blog"],
+  [header, "dash.rookhposh.ir"],
+  [header, "MobileNav"],
   [footer, "/for-online-stores"],
   [footer, "/faq"],
+  [footer, "/blog"],
+  [footer, "مقالات"],
   [shell, "Breadcrumbs"],
   [shell, "<h1"],
 ]) {
   if (!source.includes(marker)) {
     failures.push(`Missing R3 architecture marker "${marker}"`);
   }
+}
+
+const mobileNav = await readRequired("components/marketing/MobileNav.tsx");
+for (const marker of ["aria-expanded", "aria-controls", "hidden={!isOpen}", "Escape"]) {
+  if (!mobileNav.includes(marker)) {
+    failures.push(`Missing mobile navigation accessibility marker "${marker}"`);
+  }
+}
+
+const blog = await readRequired("app/blog/page.tsx");
+for (const marker of ["index: false", "Prompt 02"]) {
+  if (!blog.includes(marker)) {
+    failures.push(`Missing temporary blog marker "${marker}"`);
+  }
+}
+
+const notFound = await readRequired("app/not-found.tsx");
+for (const marker of ["/", "/how-it-works", "/for-online-stores", "/pricing", "/blog", "/faq"]) {
+  if (!notFound.includes(`href=\"${marker}\"`)) {
+    failures.push(`Custom 404 is missing internal link ${marker}`);
+  }
+}
+
+if (header.includes("blog.rookhposh.ir") || footer.includes("blog.rookhposh.ir")) {
+  failures.push("Public navigation must not use the external blog host.");
+}
+
+const experience = await readRequired("components/sections/OctabootExperience.tsx");
+if (experience.lastIndexOf("<PublicFooter />") < experience.lastIndexOf("</main>")) {
+  failures.push("Homepage footer must be outside the main element.");
 }
 
 for (const relativePath of ["app/privacy/page.tsx", "app/terms/page.tsx"]) {

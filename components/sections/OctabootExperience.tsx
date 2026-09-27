@@ -305,11 +305,10 @@ export default function OctabootExperience() {
             </div>
           </section>
 
-          <PublicFooter />
         </section>
-
-
       </main>
+
+      <PublicFooter />
     </div>
   );
 }

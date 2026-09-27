@@ -52,16 +52,38 @@ for (const [pathname, expectedTitle] of publicRoutes) {
 const homepage = pages.get("/") ?? "";
 for (const marker of [
   'href="/how-it-works/"',
+  'href="/for-online-stores/"',
   'href="/pricing/"',
   'href="/faq/"',
-  'href="/for-online-stores/"',
+  'href="/blog/"',
+  'href="https://dash.rookhposh.ir"',
 ]) {
   if (!homepage.includes(marker)) {
     failures.push(`/: missing internal link ${marker}`);
   }
 }
 
+if (homepage.includes('href="https://blog.rookhposh.ir"')) {
+  failures.push("/: public navigation still contains the external blog link");
+}
+
 const sitemap = await (await fetch(new URL("/sitemap.xml", origin))).text();
+const blogResponse = await fetch(new URL("/blog", origin));
+const blogHtml = await blogResponse.text();
+const blogRobots = blogHtml.match(/<meta[^>]+name=["']robots["'][^>]+content=["']([^"']+)["']/i)?.[1];
+
+if (blogResponse.status !== 200) {
+  failures.push(`/blog: expected 200, received ${blogResponse.status}`);
+}
+
+if (!blogRobots?.includes("noindex")) {
+  failures.push("/blog: temporary destination must be noindex");
+}
+
+if (sitemap.includes("https://rookhposh.ir/blog/")) {
+  failures.push("/sitemap.xml: temporary blog destination must not be listed");
+}
+
 for (const [pathname] of publicRoutes) {
   const expectedUrl = new URL(pathname === "/" ? "/" : `${pathname}/`, "https://rookhposh.ir").toString();
   if (!sitemap.includes(`<loc>${expectedUrl}</loc>`)) {
