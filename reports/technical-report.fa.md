@@ -1,77 +1,119 @@
-# گزارش فنی تحویل — پوسته ناوبری Prompt 01
+# گزارش فنی تحویل — زیرساخت Blog داخلی Prompt 02
 
 | مشخصه | مقدار |
 | --- | --- |
 | پروژه | رخ پوش / Rookhposh |
 | نوع گزارش | گزارش فنی |
 | زبان | فارسی |
-| تاریخ جلالی | ۱۴۰۵-۰۷-۰۵ |
-| تاریخ میلادی | 2026-09-27 |
-| revision پیاده‌سازی | `f19b774e883043d7cc6d8707298a96ba95003765` |
+| تاریخ جلالی | ۱۴۰۵-۰۷-۰۶ |
+| تاریخ میلادی | 2026-09-28 |
+| revision سورس | `478b880d7ee96c268fc7d6c36c104d2bfb42c2a6` |
 | branch | `feature/r5-prompt-01-navigation` |
 | وضعیت تحویل | IMPLEMENTED؛ انتشار خارجی انجام نشده است |
 
-## محدوده
+## محدوده و معماری
 
-Prompt 01 به‌عنوان تغییری متمرکز در header، ناوبری موبایل، ورودی Blog، 404 سفارشی و پوسته معنایی پیاده‌سازی شد. این تغییر authentication، قابلیت CMS، محتوای حقوقی، کد dashboard یا زیرساخت خارجی اضافه نمی‌کند.
+Prompt 02 مقصد Blog موقت Prompt 01 را با presentation اول‌شخص و server-rendered جایگزین می‌کند، در حالی که repository همچنان frontend-only باقی می‌ماند. authoring مقاله، storage، editor و authentication خارج از این application هستند. مرز اختیاری خواندن محتوای عمومی با `BLOG_CONTENT_API_URL` انتخاب می‌شود.
 
-## تغییرات دقیق سورس
+## فهرست دقیق فایل‌های تغییرکرده
+
+### routeها و componentهای Blog
 
 | فایل | تغییر |
 | --- | --- |
-| `components/marketing/PublicHeader.tsx` | لینک خارجی Blog با ناوبری داخلی جایگزین شد؛ لینک برای فروشگاه‌ها اضافه شد و URL دقیق CTA داشبورد حفظ شد. داده ناوبری با کامپوننت موبایل به‌اشتراک گذاشته می‌شود. |
-| `components/marketing/MobileNav.tsx` | منوی disclosure کوچک و client-only با وضعیت قابل‌دسترسی دکمه، بستن با Escape، بازگردانی focus و لینک‌های route/dashboard اضافه شد. |
-| `components/marketing/PublicFooter.tsx` | لینک مقاله به `/blog` با برچسب فارسی `مقالات` تغییر کرد. |
-| `components/sections/OctabootExperience.tsx` | `PublicFooter` بدون تغییر markup انیمیشن یا قیمت‌ها، از بخش تعرفه‌ها و `<main>` خارج شد. |
-| `app/blog/page.tsx` | مقصد موقت server-rendered برای Blog با canonical خود صفحه، `noindex` و بدون ورودی sitemap اضافه شد. جایگزینی آن در Prompt 02 به‌صراحت مشخص شده است. |
-| `app/not-found.tsx` | صفحه 404 فارسی و هم‌راستا با برند با شش مقصد داخلی لازم اضافه شد. |
-| `app/globals.css` | فقط قواعد disclosure موبایل، focus، چیدمان لینک‌های 404 و breakpoint اضافه شد. token برند، typography، قیمت‌ها و قواعد انیمیشن تغییر نکردند. |
-| `scripts/validate-seo.mjs` | markerهای ناوبری جدید، دسترسی موبایل، Blog موقت و 404 سفارشی به‌روزرسانی شد. |
-| `scripts/validate-r3.mjs` | assertionهای سورس Prompt 01 و nesting معنایی اضافه شد. |
-| `scripts/smoke-seo.mjs` | assertionهای محتوای 404 سفارشی اضافه شد. |
-| `scripts/smoke-r3.mjs` و `scripts/smoke-r4.mjs` | بررسی لینک‌های ناوبری، CTA داشبورد، حذف لینک خارجی Blog و مقصد موقت Blog اضافه شد. |
+| `app/blog/page.tsx` | فهرست server-rendered مقاله، metadata وابسته به provider، empty state واقعی، رفتار noindex بدون post قابل index و CTA محصول. |
+| `app/blog/[slug]/page.tsx` | route مقاله server-rendered، metadata، canonical، جزئیات مقاله، breadcrumb، محتوای مرتبط، CTA و `notFound()` برای محتوای ناموجود/منتشرنشده. |
+| `app/sitemap.ts` | افزودن URLهای Blog فقط برای postهای منتشرشده، معتبر و قابل index. |
+| `components/blog/BlogCard.tsx` | کارت مقاله با لینک داخلی slug، دسته/تاریخ، عنوان، خلاصه و تصویر اختیاری. |
+| `components/blog/BlogContent.tsx` | رندر Markdown در سرور با `react-markdown`، `rehype-sanitize`، غیرفعال‌سازی HTML خام و حذف تصویرهای Markdown. |
+| `components/blog/BlogDate.tsx` | فرمت تاریخ فارسی انتشار/به‌روزرسانی با `<time>` معنایی. |
+| `components/blog/BlogImage.tsx` | رندر تصویر featured با alt، بارگذاری lazy/eager و جعبه layout scoped. |
+| `components/blog/BlogProductCta.tsx` | CTA محدود و factual به `/for-online-stores`. |
+| `app/globals.css` | فقط styleهای scoped فهرست/کارت/مقاله/CTA/متن/ریسپانسیو Blog. |
 
-## تصمیم ناوبری و دسترسی‌پذیری
+### مرز محتوا و پیکربندی
 
-چیدمان دسکتاپ header فعلی حفظ شده و چهار مسیر داخلی به‌علاوه CTA خارجی dashboard نمایش داده می‌شود. در عرض‌های حداکثر ۹۰۰ پیکسل، گروه لینک دسکتاپ مخفی و دکمه منوی کوچک نمایش داده می‌شود. دکمه `aria-expanded`، `aria-controls` و برچسب فارسی قابل‌دسترسی دارد. پنل هنگام بسته‌بودن از رفتار native `hidden` استفاده می‌کند، هنگام بازبودن با صفحه‌کلید قابل‌دسترسی است، با Escape بسته می‌شود و focus را به toggle برمی‌گرداند. هیچ library انیمیشن یا وابستگی runtime جدیدی اضافه نشد.
+| فایل | تغییر |
+| --- | --- |
+| `lib/blog/types.ts` | قرارداد typed برای post، تصویر و نویسنده عمومی Blog. |
+| `lib/blog/client.ts` | client اختیاری HTTP(S) با query انتشار، بدون auth header، timeout چهارثانیه‌ای، محدودیت اندازه پاسخ، fallback خطای JSON و revalidation tag. |
+| `lib/blog/repository.ts` | اعتبارسنجی runtime payload، فیلتر published/future-date، اعتبارسنجی slug، کنترل URLهای asset/canonical، مرتب‌سازی و حذف تکرار. |
+| `.env.example` | مستندسازی `BLOG_CONTENT_API_URL` اختیاری و server-only. |
+| `package.json` | افزودن dependencyهای دقیق `react-markdown`/`rehype-sanitize` و scriptهای test سورس/HTTP Blog. |
+| `package-lock.json` | قفل‌کردن dependency graph مربوط به Markdown و sanitization. |
 
-## رفتار مسیر و index
+### تست و مستندات/وضعیت
 
-`/blog/` برای جلوگیری از broken link با status 200 پاسخ می‌دهد، اما metadata آن `noindex, follow` است، در `PUBLIC_INDEXABLE_ROUTES` وجود ندارد و smoke test نبودن آن در `sitemap.xml` را بررسی می‌کند. جایگزینی آن با محتوای تأییدشده Blog/CMS در Prompt 02 انجام می‌شود. `app/not-found.tsx` برای مسیرهای ناموجود رندر می‌شود و smoke تولیدی status واقعی HTTP 404 را تأیید می‌کند.
+| فایل | تغییر |
+| --- | --- |
+| `scripts/validate-blog.mjs` | بررسی contract سورس برای routeها، فیلدهای provider، markerهای sanitizer و نبود raw HTML insertion. |
+| `scripts/smoke-blog.mjs` | smoke تولیدی بدون CMS برای empty state، noindex، حذف از sitemap و 404 واقعی slug ناموجود. |
+| `scripts/validate-seo.mjs` | به‌روزرسانی contract موجود SEO برای Blog داخلی. |
+| `scripts/validate-r3.mjs` | به‌روزرسانی contract موجود R3 برای route مقاله پویا و markerهای provider. |
+| `docs/blog-content-provider.md` | contract provider، رفتار خطا، قواعد انتشار و مستندات safety محتوا. |
+| `README.md` | به‌روزرسانی setup، validation، route و مرز مالکیت Blog. |
+| `docs/01-project-brief.md` | تفکیک presentation داخلی از authoring خارجی در مرز محصول/Integration. |
+| `docs/r3-information-architecture.md` | افزودن به‌روزرسانی Prompt 02 برای IA و routeها. |
+| `docs/10-known-issues.md` | به‌روزرسانی ریسک‌های provider و availability محتوا. |
+| `docs/12-final-review.md` | افزودن final review افزایشی Prompt 02 و شواهد آن. |
+| `project-integrity-manifest.md` | افزودن مقایسه یکپارچگی و حفظ Blog. |
+| `project-state.json` | افزودن state، artifact، تصمیم، ریسک و validation Prompt 02. |
+| `release-manifest.json` | به‌روزرسانی release identifier، layout، commandها، artifactها و validation. |
 
-## اصلاح معنایی
+### artifactهای گزارش
 
-پیش از این `PublicFooter` درون بخش تعرفه‌ها و `<main>` رندر می‌شد. اکنون `<main>` پیش از footer سطح سایت بسته می‌شود. styleهای footer مشترک باقی مانده‌اند و مرز runtime انیمیشن دست‌نخورده است.
+| فایل | تغییر |
+| --- | --- |
+| `reports/customer-report.en.md` | گزارش تحویل انگلیسی برای مشتری درباره Prompt 02. |
+| `reports/customer-report.fa.md` | گزارش تحویل فارسی برای مشتری درباره Prompt 02. |
+| `reports/technical-report.en.md` | گزارش فنی انگلیسی، شواهد و فهرست دقیق فایل‌های Prompt 02. |
+| `reports/technical-report.fa.md` | گزارش فنی فارسی، شواهد و فهرست دقیق فایل‌های Prompt 02. |
 
-## بررسی حفظ یکپارچگی
+## رفتار provider
+
+client نسبت به base URL پیکربندی‌شده درخواست‌های `/posts?status=published&limit=100` و `/posts/{slug}?status=published` می‌فرستد. configuration ناموجود/نامعتبر، timeout، پاسخ non-2xx، JSON نامعتبر، پاسخ بزرگ‌تر از حد، یا record نامعتبر به‌جای crash شدن build/runtime به نبود post عمومی تبدیل می‌شود. recordهایی که صراحتاً منتشرنشده یا دارای تاریخ آینده باشند رد می‌شوند. endpoint عمومی باید محتوای از قبل منتشرشده را ارائه کند و repository در صورت وجود فیلدهای status فیلتر اضافه اعمال می‌کند.
+
+canonical ارائه‌شده از content فقط وقتی پذیرفته می‌شود که به origin سایت اصلی resolve شود. URL asset باید relative یا HTTPS باشد. slug با حروف/اعداد Unicode و ادامه `_`/`-` محدود شده است. تاریخ‌ها به ISO string نرمال می‌شوند.
+
+## رفتار render و index
+
+فهرست و route مقاله Blog، pageهای پویا و server-rendered در App Router هستند. بدون CMS URL، `/blog/` با status 200 و empty state فارسی مفید، `noindex, follow` و بدون entry در sitemap پاسخ می‌دهد. با محتوای معتبر published، index در صورت وجود post قابل index واجد شرایط index است و فقط articleهایی که `noindex: false` دارند وارد sitemap می‌شوند. slug ناموجود/منتشرنشده/نامعتبر با `notFound()` به 404 واقعی مشترک می‌رسد.
+
+بدنه مقاله با `react-markdown`، `rehype-sanitize` و `skipHtml` رندر می‌شود. برای محتوای CMS از `dangerouslySetInnerHTML` خام استفاده نشده است و تصویرهای Markdown برای تکیه بر field معتبر featured image حذف می‌شوند.
+
+## بررسی حفظ و امنیت
 
 - `components/sections/AnimationRuntime.tsx`: بدون تغییر.
 - `public/frames`: بدون تغییر؛ هر ۵۳۵ فایل WebP باقی است.
-- timelineهای GSAP/ScrollTrigger، منطق canvas، الگوریتم فریم، hero، قیمت‌ها، رنگ‌ها، typography و URLهای dashboard: بدون تغییر.
-- هیچ dependency جدیدی اضافه یا upgrade نشد.
-- هیچ secret، credential، authentication، ورودی کاربر، database path یا سطح انتشار خارجی جدیدی اضافه نشد.
+- timelineهای GSAP/ScrollTrigger، رفتار canvas، الگوریتم بارگذاری فریم، ترکیب hero، قیمت‌ها، style برند و URL dashboard: بدون تغییر.
+- database محلی، authentication، editor، write API، مقاله جعلی یا production mock اضافه نشده است.
+- برای provider عمومی secret یا authorization header ارسال نمی‌شود.
+- ورودی provider محدود و پیش از render اعتبارسنجی می‌شود؛ HTML خام غیرفعال و Markdown sanitize می‌شود.
+- مشکل امنیتی Critical یا High ناشی از implementation تغییرکرده مشاهده نشد.
 
 ## شواهد اعتبارسنجی
 
 | فرمان / بررسی | نتیجه |
 | --- | --- |
+| `npm ci` | PASS؛ نصب کامل و گزارش ۰ آسیب‌پذیری توسط npm |
+| `npm audit --omit=dev` | PASS؛ ۰ آسیب‌پذیری |
 | `npm run lint` | PASS |
 | `npm run typecheck` | PASS |
 | `npm run test:seo` | PASS |
 | `npm run test:r2` | PASS؛ بررسی ۵۳۵ فریم |
 | `npm run test:r3` | PASS |
-| `npm run build` در sandbox | ENVIRONMENT FAILURE؛ worker TypeScript Next پس از compile موفق با `spawn EPERM` متوقف شد |
-| `npm run build` در اجرای مجاز مجدد | PASS؛ مسیرهای `/blog` و `/_not-found` به‌صورت static ساخته شدند |
-| `npm run test:seo:smoke` | PASS؛ metadata homepage، مسیرهای crawl، status/content 404 سفارشی |
-| `npm run test:r3:smoke` | PASS؛ routeهای عمومی، noindex بودن `/blog`، حذف از sitemap و لینک‌های ناوبری |
-| `npm run test:r4:smoke` | PASS؛ مجموعه regression سئوی Production کنترل‌شده |
+| `npm run test:blog` | PASS |
+| `npm run build` | PASS؛ routeهای `/blog` و `/blog/[slug]` پویا و routeهای قبلی نیز تولید شدند |
+| `npm run test:seo:smoke` | PASS |
+| `npm run test:r3:smoke` | PASS |
+| `npm run test:r4:smoke` | PASS |
+| `npm run test:blog:smoke` | PASS |
+| smoke integration با CMS آزمایشی | PASS؛ post منتشرشده رندر شد، draft به 404 رسید و payload شامل `<script>` در خروجی نیامد |
+| بررسی Git diff | PASS؛ خطای whitespace وجود نداشت |
+| انتشار خارجی | NOT_PERFORMED |
 
-خطای اولیه build به‌عنوان محدودیت محیط/سطح دسترسی process طبقه‌بندی شد، زیرا همان فرمان در اجرای مجاز مجدد با موفقیت پایان یافت. پس از اجرای مجدد، خطای source باقی نماند.
+اولین اجرای install/build در sandbox با محدودیت process/file-lock ویندوزی `spawn EPERM` مواجه شد. اجرای مجاز مجدد `npm ci` و `npm run build` با موفقیت پایان یافت؛ این مورد محدودیت محیط و نه خطای سورس طبقه‌بندی شد.
 
-## بررسی امنیت
+## انتشار و rollback
 
-این تغییر فقط state محلی ناوبری را اضافه می‌کند. کامپوننت client فقط هنگام بازبودن منو یک listener برای Escape ثبت و هنگام cleanup حذف می‌کند. مقصد لینک‌ها ثابت و کنترل‌شده توسط سورس هستند؛ URL یا HTML تحت کنترل کاربر، storage، token، upload، API یا عملیات privileged اضافه نشده است. URL dashboard خارجی بدون تغییر باقی مانده است. مشکل امنیتی بااهمیتی از این پیاده‌سازی ایجاد یا حل‌نشده باقی نمانده است.
-
-## انتشار و بازگشت
-
-Git push، تغییر DNS، تغییر dashboard یا انتشار خارجی انجام نشد. پیاده‌سازی روی `feature/r5-prompt-01-navigation` commit شده است؛ در صورت نیاز، rollback به commit پایه Prompt 00 یعنی `8e94c24` انجام می‌شود.
+Git push، تغییر DNS، تغییر dashboard یا انتشار Production انجام نشد. فقط پس از تنظیم endpoint عمومی CMS تأییدشده deploy و سپس بررسی زنده SEO/Blog تکرار شود. checkpoint قبلی `c3552cb` و revision پیاده‌سازی Prompt 02 برابر است با `478b880d7ee96c268fc7d6c36c104d2bfb42c2a6`.

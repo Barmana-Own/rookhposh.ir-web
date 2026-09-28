@@ -1,77 +1,119 @@
-# Technical Delivery Report — Prompt 01 Navigation Shell
+# Technical Delivery Report — Prompt 02 First-Party Blog Foundation
 
 | Field | Value |
 | --- | --- |
 | Project | Rookhposh / رخ پوش |
 | Report type | Technical report |
 | Language | English |
-| Jalali date | ۱۴۰۵-۰۷-۰۵ |
-| Gregorian date | 2026-09-27 |
-| Implementation revision | `f19b774e883043d7cc6d8707298a96ba95003765` |
+| Jalali date | ۱۴۰۵-۰۷-۰۶ |
+| Gregorian date | 2026-09-28 |
+| Source revision | `478b880d7ee96c268fc7d6c36c104d2bfb42c2a6` |
 | Branch | `feature/r5-prompt-01-navigation` |
 | Delivery status | IMPLEMENTED; external deployment not performed |
 
-## Scope
+## Scope and architecture
 
-Prompt 01 was implemented as a focused header, mobile navigation, Blog entry, custom 404, and semantic-shell change. The implementation does not add authentication, CMS functionality, legal content, dashboard code, or external infrastructure changes.
+Prompt 02 replaces the Prompt 01 Blog placeholder with a first-party server-rendered Blog presentation while keeping the repository frontend-only. Article authoring, storage, editor access, and authentication remain outside this application. The optional public read boundary is selected with `BLOG_CONTENT_API_URL`.
 
-## Exact source changes
+## Exact files changed
+
+### Blog routes and components
 
 | File | Change |
 | --- | --- |
-| `components/marketing/PublicHeader.tsx` | Replaced the external Blog anchor with first-party navigation; added the For Online Stores link and retained the exact dashboard CTA URL. Navigation data is shared with the mobile component. |
-| `components/marketing/MobileNav.tsx` | Added a small client-only disclosure menu with accessible button state, keyboard Escape handling, focus restoration, and route/dashboard links. |
-| `components/marketing/PublicFooter.tsx` | Changed the article link to internal `/blog` with the Persian label `مقالات`. |
-| `components/sections/OctabootExperience.tsx` | Moved `PublicFooter` outside the pricing section and outside `<main>` without changing animation or pricing markup. |
-| `app/blog/page.tsx` | Added a temporary server-rendered Blog destination with self-canonical metadata, `noindex`, and no sitemap entry. It is explicitly marked for replacement by Prompt 02. |
-| `app/not-found.tsx` | Added a Persian branded 404 surface with six required internal destinations. |
-| `app/globals.css` | Added only mobile disclosure, focus, 404 link layout, and breakpoint rules. No brand token, typography, pricing, or animation rule was changed. |
-| `scripts/validate-seo.mjs` | Updated source assertions for the new navigation, mobile accessibility, temporary Blog route, and custom 404. |
-| `scripts/validate-r3.mjs` | Added Prompt 01 source and semantic-nesting regression assertions. |
-| `scripts/smoke-seo.mjs` | Added custom 404 content assertions. |
-| `scripts/smoke-r3.mjs` / `scripts/smoke-r4.mjs` | Added navigation, dashboard CTA, external-blog removal, and temporary Blog checks. |
+| `app/blog/page.tsx` | Server-rendered article index, provider-backed metadata, truthful empty state, noindex behavior without indexable posts, and product CTA. |
+| `app/blog/[slug]/page.tsx` | Server-rendered article route, route metadata, canonical, article details, breadcrumb shell, related content, CTA, and `notFound()` for missing/unpublished content. |
+| `app/sitemap.ts` | Adds Blog index/article URLs only for validated, indexable published posts. |
+| `components/blog/BlogCard.tsx` | Article card with internal slug link, category/date, title, excerpt, and optional featured image. |
+| `components/blog/BlogContent.tsx` | Server Markdown rendering with `react-markdown`, `rehype-sanitize`, raw HTML disabled, and Markdown image suppression. |
+| `components/blog/BlogDate.tsx` | Persian publication/update date formatting with semantic `<time>`. |
+| `components/blog/BlogImage.tsx` | Validated featured-image rendering with alt text, lazy/eager loading, and scoped layout box. |
+| `components/blog/BlogProductCta.tsx` | Restrained factual CTA to `/for-online-stores`. |
+| `app/globals.css` | Scoped Blog index/card/article/CTA/prose/responsive styles only. |
 
-## Navigation and accessibility design
+### Content boundary and configuration
 
-Desktop keeps the existing header layout and exposes four first-party journeys plus the external dashboard CTA. At widths up to 900px, the desktop link group is hidden and a compact menu button is shown. The button exposes `aria-expanded`, `aria-controls`, and a Persian accessible label. The panel uses native hidden behavior when closed, is keyboard reachable when open, closes on Escape, and returns focus to the toggle. No animation library or additional runtime dependency was introduced.
+| File | Change |
+| --- | --- |
+| `lib/blog/types.ts` | Typed public Blog post, image, and author contract. |
+| `lib/blog/client.ts` | Optional HTTP(S) CMS client with published query parameters, no auth header, 4-second timeout, response-size bound, JSON failure fallback, and revalidation tags. |
+| `lib/blog/repository.ts` | Runtime payload validation, published/future-date filtering, slug validation, safe asset/canonical URL handling, sorting, and deduplication. |
+| `.env.example` | Documents optional server-only `BLOG_CONTENT_API_URL`. |
+| `package.json` | Adds exact `react-markdown`/`rehype-sanitize` dependencies and Blog source/HTTP test scripts. |
+| `package-lock.json` | Locks the added Markdown/sanitization dependency graph. |
 
-## Routing and indexing behavior
+### Tests and documentation/state
 
-`/blog/` returns 200 so the new navigation does not point to a broken route, but its metadata is `noindex, follow`, it is absent from `PUBLIC_INDEXABLE_ROUTES`, and smoke validation asserts it is absent from `sitemap.xml`. Prompt 02 owns replacement with approved Blog/CMS content. The custom `app/not-found.tsx` renders for nonexistent paths and production smoke confirms HTTP 404.
+| File | Change |
+| --- | --- |
+| `scripts/validate-blog.mjs` | Source contract checks for routes, provider fields, sanitizer markers, and absence of raw HTML insertion. |
+| `scripts/smoke-blog.mjs` | No-CMS production smoke for empty state, noindex, sitemap exclusion, and genuine missing-slug 404. |
+| `scripts/validate-seo.mjs` | Existing SEO source contract updated for the first-party Blog implementation. |
+| `scripts/validate-r3.mjs` | Existing R3 source contract updated for the dynamic Blog article route and provider markers. |
+| `docs/blog-content-provider.md` | Provider contract, failure behavior, publication rules, and content-safety documentation. |
+| `README.md` | Setup, validation, route, and ownership documentation updated for Blog. |
+| `docs/01-project-brief.md` | Product/integration boundary updated to distinguish first-party presentation from external authoring. |
+| `docs/r3-information-architecture.md` | Prompt 02 incremental IA and route update added. |
+| `docs/10-known-issues.md` | Blog provider/content availability risks updated. |
+| `docs/12-final-review.md` | Prompt 02 incremental final review and evidence added. |
+| `project-integrity-manifest.md` | Blog preservation/integrity comparison added. |
+| `project-state.json` | Prompt 02 state, artifacts, decisions, risks, and validation added. |
+| `release-manifest.json` | Release identifier, source layout, commands, artifacts, and validation updated. |
 
-## Semantic correction
+### Reporting artifacts
 
-The homepage previously rendered `PublicFooter` as a descendant of the pricing section and `<main>`. It now closes `<main>` before rendering the site-level footer. The footer styles remain shared and no animation runtime boundary was touched.
+| File | Change |
+| --- | --- |
+| `reports/customer-report.en.md` | Customer-facing English delivery report for Prompt 02. |
+| `reports/customer-report.fa.md` | Customer-facing Persian delivery report for Prompt 02. |
+| `reports/technical-report.en.md` | Technical English evidence and exact-file report for Prompt 02. |
+| `reports/technical-report.fa.md` | Technical Persian evidence and exact-file report for Prompt 02. |
 
-## Preservation and integrity review
+## Provider behavior
+
+The client requests `/posts?status=published&limit=100` and `/posts/{slug}?status=published` relative to the configured base URL. Missing/invalid configuration, timeout, non-2xx response, invalid JSON, oversized response, or malformed records resolve to no public posts rather than crashing the build. Records explicitly marked non-published or dated in the future are rejected. The public API is expected to expose already-published content; the repository applies an additional filter when status fields are present.
+
+Canonical URLs supplied by content are accepted only when they resolve to the configured main-site origin. Asset URLs must be relative or HTTPS. Slugs are bounded Unicode letter/number identifiers with `_`/`-` continuation characters. Dates are normalized to ISO strings.
+
+## Rendering and indexing behavior
+
+The Blog index and article route are dynamic server-rendered App Router pages. With no CMS URL configured, `/blog/` returns 200 with a useful Persian empty state, `noindex, follow`, and no Blog sitemap entries. With validated published content, the index is eligible for indexing unless noindex content is the only content; article sitemap entries are emitted only for `noindex: false` posts. Missing/unpublished/invalid slugs use `notFound()` and return the shared genuine HTTP 404.
+
+Article body content is rendered through `react-markdown` with `rehype-sanitize` and `skipHtml`. No raw unsanitized `dangerouslySetInnerHTML` is used for CMS content; Markdown images are suppressed in favor of the validated featured-image field.
+
+## Preservation and security review
 
 - `components/sections/AnimationRuntime.tsx`: unchanged.
 - `public/frames`: unchanged; 535 WebP files remain present.
-- GSAP/ScrollTrigger timelines, canvas logic, frame algorithm, hero, pricing values, brand colors, typography, and dashboard URLs: unchanged.
-- No source dependency was added or upgraded.
-- No secrets, credentials, authentication, user input, database path, or external deployment surface was introduced.
+- GSAP/ScrollTrigger timelines, canvas behavior, frame-loading algorithm, hero composition, pricing values, brand styling, and dashboard URL: unchanged.
+- No local database, authentication, editor, write API, fake article, or production mock was added.
+- No secret or authorization header is sent to the public content provider.
+- Provider input is bounded and validated before rendering; raw HTML is disabled and Markdown is sanitized.
+- No Critical or High security defect was introduced by the changed implementation.
 
 ## Validation evidence
 
 | Command / check | Result |
 | --- | --- |
+| `npm ci` | PASS; clean install completed and npm reported 0 vulnerabilities |
+| `npm audit --omit=dev` | PASS; 0 vulnerabilities |
 | `npm run lint` | PASS |
 | `npm run typecheck` | PASS |
 | `npm run test:seo` | PASS |
 | `npm run test:r2` | PASS; 535 frames verified |
 | `npm run test:r3` | PASS |
-| `npm run build` in sandbox | ENVIRONMENT FAILURE; Next TypeScript worker returned `spawn EPERM` after successful compilation |
-| `npm run build` permitted rerun | PASS; static routes included `/blog` and `/_not-found` |
-| `npm run test:seo:smoke` | PASS; homepage metadata, crawl routes, custom 404 status/content |
-| `npm run test:r3:smoke` | PASS; public routes, `/blog` noindex, sitemap exclusion, navigation links |
-| `npm run test:r4:smoke` | PASS; controlled production SEO regression suite |
+| `npm run test:blog` | PASS |
+| `npm run build` | PASS; `/blog` and `/blog/[slug]` are dynamic routes and all existing routes generated |
+| `npm run test:seo:smoke` | PASS |
+| `npm run test:r3:smoke` | PASS |
+| `npm run test:r4:smoke` | PASS |
+| `npm run test:blog:smoke` | PASS |
+| CMS fixture integration smoke | PASS; published post rendered, draft returned 404, and `<script>` payload was not emitted |
+| Git diff check | PASS; no whitespace errors |
+| External deployment | NOT_PERFORMED |
 
-The initial build failure is classified as an environment/process-permission limitation because the same command completed successfully on the permitted rerun. No source-code validation failure remained.
-
-## Security review
-
-The change adds only local navigation state. The client component registers one Escape listener only while open and removes it on cleanup. Links are fixed source-controlled destinations; no user-controlled URL, HTML, storage, token, upload, API, or privileged operation was added. The external dashboard URL is unchanged. No material security defect was introduced or left unresolved by this implementation.
+The first ordinary sandboxed build/install attempts encountered Windows `spawn EPERM` process/file-lock limitations. The permitted reruns of `npm ci` and `npm run build` completed successfully; this was classified as an environment limitation, not a source failure.
 
 ## Deployment and rollback
 
-No push, DNS change, dashboard change, or external deployment was performed. The implementation is committed on `feature/r5-prompt-01-navigation`; rollback is the parent Prompt 00 baseline commit `8e94c24` if required.
+No Git push, DNS change, dashboard change, or production deployment was performed. Deploy the committed source revision only after configuring an approved public CMS endpoint and then repeat the live SEO/Blog verification. The preceding source checkpoint is `c3552cb`; the Prompt 02 implementation revision is `478b880d7ee96c268fc7d6c36c104d2bfb42c2a6`.
