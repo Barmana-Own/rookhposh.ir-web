@@ -20,16 +20,18 @@ The public origin is configured with `NEXT_PUBLIC_SITE_URL`. The default is `htt
 npm run test:seo
 npm run test:r2
 npm run test:r3
+npm run test:blog
 npm run test:r4:smoke
 npm run test:seo:smoke
 npm run test:r3:smoke
+npm run test:blog:smoke
 npm run lint
 npm run typecheck
 npm run build
 npm run start
 ```
 
-The source tests check metadata/crawl/schema markers, the R2 rendering/frame-loading safeguards, and the R3 route/intent registry. The controlled-production R4 smoke test runs against `next start` and verifies rendered metadata, canonical URLs, robots, sitemap, JSON-LD syntax, RTL, internal links, expected route statuses, and a genuine 404 response. The production smoke tests run against the same build and verify the complete R1-R3 contract. The production build generates the homepage, four factual public content routes, `/robots.txt`, `/sitemap.xml`, and `/manifest.webmanifest`.
+The source tests check metadata/crawl/schema markers, the R2 rendering/frame-loading safeguards, the R3 route/intent registry, and the Blog provider/rendering boundary. The controlled-production R4 smoke test runs against `next start` and verifies rendered metadata, canonical URLs, robots, sitemap, JSON-LD syntax, RTL, internal links, expected route statuses, and a genuine 404 response. The production smoke tests run against the same build and verify the complete R1-R3 contract plus the no-CMS Blog empty state. The production build generates the homepage, four factual public content routes, first-party Blog routes, `/robots.txt`, `/sitemap.xml`, and `/manifest.webmanifest`.
 
 ## SEO surfaces
 
@@ -44,6 +46,7 @@ The source tests check metadata/crawl/schema markers, the R2 rendering/frame-loa
 - R2 performance/rendering evidence: `docs/r2-performance-rendering-refactor.md`
 - R3 information architecture evidence: `docs/r3-information-architecture.md`
 - R4 production verification evidence: `docs/r4-production-seo-verification.md`
+- Blog provider contract and safety boundary: `docs/blog-content-provider.md`
 
 ## Rendering and animation boundary
 
@@ -57,6 +60,8 @@ The source tests check metadata/crawl/schema markers, the R2 rendering/frame-loa
 - `/how-it-works/` — factual seven-step workflow.
 - `/pricing/` — existing trial, seasonal, and annual plans.
 - `/faq/` — factual product questions and answers.
+- `/blog/` — first-party server-rendered published-article index, with a truthful empty state when no provider is configured.
+- `/blog/[slug]/` — first-party server-rendered published article route with real 404 behavior for unavailable content.
 
 Terms of Use, Privacy Policy, and a separate direct-to-consumer `/virtual-try-on/` page remain unpublished pending owner-approved content and positioning decisions.
 
@@ -68,4 +73,4 @@ The FAQ link points to factual content in the landing page. Terms of Use and Pri
 
 ## Scope boundary
 
-This repository owns the public landing page only. The dashboard, blog, and trust-seal provider are external systems and are not reimplemented here. No local database, authentication system, or application API is required for this page.
+This repository owns the public landing page and the first-party Blog presentation. The dashboard and trust-seal provider remain external systems. Blog authoring/content storage remains an external public CMS/API selected through `BLOG_CONTENT_API_URL`; no local database, authentication system, editor, or write API is implemented here.

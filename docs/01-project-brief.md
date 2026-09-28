@@ -59,13 +59,14 @@ The page had useful visible copy and a single H1 but lacked the source-level SEO
 | Integration | Status | Use |
 | --- | --- | --- |
 | `https://dash.rookhposh.ir` | CONFIRMED by existing source | Dashboard and plan CTAs |
-| `https://blog.rookhposh.ir` | CONFIRMED by existing source | Blog and informational links |
+| `https://blog.rookhposh.ir` | CONFIRMED by existing source | Separate related host; no longer the primary public article destination |
+| `BLOG_CONTENT_API_URL` | OPTIONAL | Public, read-only published article content source for the first-party Blog routes |
 | `https://trustseal.enamad.ir` | CONFIRMED by existing source | Trust seal image and verification link |
 | Search engines and social crawlers | ASSUMED | Consume metadata, structured data, robots, and sitemap |
 
 ## 10. Major data domains
 
-This repository is a public frontend-only landing page. Its relevant content domains are site identity, service description, plan summaries, contact details, and crawl/indexing metadata. There is no local application database, authenticated user record, payment record, or server-side business API in this repository.
+This repository is a public frontend-only landing page with a first-party Blog presentation. Its relevant content domains are site identity, service description, plan summaries, contact details, published article content, and crawl/indexing metadata. There is no local application database, authenticated user record, payment record, CMS editor, or server-side business API in this repository.
 
 ## 11. Initial security and privacy concerns
 
@@ -73,7 +74,7 @@ This repository is a public frontend-only landing page. Its relevant content dom
 - Keep JSON-LD static and sourced only from repository-controlled values.
 - Validate the public site origin before using it in canonical URLs and structured data.
 - Keep external trust-seal requests HTTPS-only and retain the existing origin referrer policy.
-- Avoid indexing non-existent private paths or inventing sitemap entries for the separate dashboard/blog applications.
+- Avoid indexing non-existent private paths or inventing sitemap entries for the separate dashboard application or unavailable Blog content.
 
 ## 12. In scope
 
@@ -87,7 +88,7 @@ This repository is a public frontend-only landing page. Its relevant content dom
 
 ## 13. Out of scope
 
-- Rebuilding the dashboard or blog.
+- Rebuilding the dashboard or operating a CMS/editor. The public Blog presentation is implemented in this repository; article authoring remains external.
 - Creating a backend, database, authentication, or payment system.
 - Fabricating business claims, reviews, locations, price schema, or social profiles not present in the source.
 - Changing the established visual identity, animation sequence, pricing values, or external integrations.
@@ -120,3 +121,7 @@ Use the Next.js Metadata API and App Router file conventions, a small shared sit
 ## 18. Handoff notes for Stage 02
 
 The UI is an existing dark, gold-accented Persian RTL editorial landing page. Stage 02 should preserve its visual hierarchy and seven-step story while documenting the semantic SEO surfaces, responsive states, accessibility constraints, and the new non-JavaScript fallback.
+
+## Prompt 02 implementation update
+
+The first-party public Blog presentation now lives at `/blog/` and `/blog/[slug]/`. It uses a server-rendered content-provider boundary under `lib/blog/` and remains safe when `BLOG_CONTENT_API_URL` is absent or unavailable. The external `blog.rookhposh.ir` host is retained only as a separate related integration and is not the primary public article destination. No local CMS, database, editor, authentication, or fabricated article content was added.

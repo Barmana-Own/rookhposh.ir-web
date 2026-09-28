@@ -4,7 +4,7 @@
     "origin": "https://rookhposh.ir",
     "language": "fa-IR",
     "framework": "Next.js 16 App Router",
-    "release": "seo-source-fix-r4-verification-2026-09-26"
+    "release": "seo-source-fix-prompt-02-blog-foundation-2026-09-28"
   },
   "activeStage": "12-fullstack-final-review",
   "workflowStatus": "complete",
@@ -61,6 +61,7 @@
     "docs/r2-performance-rendering-refactor.md",
     "docs/r3-information-architecture.md",
     "docs/r4-production-seo-verification.md",
+    "docs/blog-content-provider.md",
     "project-integrity-manifest.md",
     "README.md",
     "release-manifest.json",
@@ -80,6 +81,9 @@
     "components/marketing/PlanCards.tsx",
     "components/marketing/FaqList.tsx",
     "components/marketing/StorySteps.tsx",
+    "components/blog/",
+    "app/blog/",
+    "lib/blog/",
     "lib/marketing.ts",
     "app/for-online-stores/page.tsx",
     "app/how-it-works/page.tsx",
@@ -90,6 +94,8 @@
     "scripts/validate-r3.mjs",
     "scripts/smoke-r3.mjs",
     "scripts/smoke-r4.mjs",
+    "scripts/validate-blog.mjs",
+    "scripts/smoke-blog.mjs",
     "public/images/rookhposh-mark.webp"
   ],
   "architectureDecisions": [
@@ -104,7 +110,9 @@
     "Treat the homepage as B2B/store-first based on repeated store-facing copy, pricing, and dashboard evidence while preserving current consumer-facing wording pending owner confirmation.",
     "Create only four distinct factual routes: store use case, workflow, pricing, and FAQ; do not publish thin keyword variants or unapproved legal/consumer pages.",
     "Use one shared metadata helper, visible breadcrumbs with matching BreadcrumbList JSON-LD, and a route registry as the sitemap source of truth.",
-    "Do not add FAQPage JSON-LD because current Google search appearance guidance does not make regular FAQ rich results a reasonable expectation for this commercial site."
+    "Do not add FAQPage JSON-LD because current Google search appearance guidance does not make regular FAQ rich results a reasonable expectation for this commercial site.",
+    "Use a server-rendered Blog presentation with an explicit external public-content provider boundary; do not add a local CMS, database, editor, or authentication layer.",
+    "Render only validated published Blog records, keep empty/no-CMS content noindex and out of the sitemap, and sanitize Markdown with raw HTML disabled."
   ],
   "assumptions": [
     "https://rookhposh.ir is the canonical public origin.",
@@ -123,7 +131,8 @@
     "No field Core Web Vitals or Lighthouse score is available from this environment.",
     "Homepage intent remains owner-confirmation pending; the implementation does not silently rewrite the current H1 or positioning.",
     "Approved legal copy and routes remain unavailable, so Terms and Privacy pages are intentionally unpublished.",
-    "The final public route set is intentionally small; additional routes require distinct factual content and owner-approved intent."
+    "The final public route set is intentionally small; additional routes require distinct factual content and owner-approved intent.",
+    "Blog authoring and content availability remain external through optional BLOG_CONTENT_API_URL; the first-party public routes belong to this application."
   ],
   "unresolvedBlockers": [
     "Live https://rookhposh.ir is serving an older deployment without the R1-R3 metadata, crawl routes, JSON-LD, or four public content routes.",
@@ -156,7 +165,12 @@
     "R1 metadata/canonical/robots/sitemap/JSON-LD/404 smoke": "PASS",
     "external blog/legal route availability": "NOT_RUN",
     "live Search Console/rich-result test": "NOT_RUN",
-    "external deployment": "NOT_PERFORMED"
+    "external deployment": "NOT_PERFORMED",
+    "npm ci after Prompt 02 dependency update": "PASS; 456 packages installed and 0 vulnerabilities reported",
+    "npm run test:blog": "PASS",
+    "npm run test:blog:smoke": "PASS; no-CMS empty state, sitemap exclusion, and missing-slug 404",
+    "CMS fixture integration smoke": "PASS; published content rendered, draft excluded, and script payload not emitted",
+    "Prompt 02 source build": "PASS; dynamic /blog and /blog/[slug] routes generated"
   },
   "r1": {
     "status": "PASS_WITH_DOCUMENTED_OWNER_INPUT",
@@ -297,6 +311,39 @@
       "Repeat live checks with a protocol-level HTTP client plus mobile and reduced-motion emulation."
     ],
     "artifact": "docs/r4-production-seo-verification.md"
+  },
+  "prompt02": {
+    "status": "PASS",
+    "phase": "First-Party Public Blog Foundation",
+    "date": {
+      "gregorian": "2026-09-28",
+      "jalali": "۱۴۰۵-۰۷-۰۶"
+    },
+    "routes": [
+      "/blog/",
+      "/blog/[slug]/"
+    ],
+    "provider": "Optional public BLOG_CONTENT_API_URL; no local CMS, database, editor, or auth",
+    "emptyState": "PASS; no CMS configuration produces a useful noindex page and no Blog sitemap entries",
+    "publishedContent": "PASS; validated records only, published-only filtering, no fake posts",
+    "contentSafety": "PASS; react-markdown plus rehype-sanitize with raw HTML disabled",
+    "missingContent": "PASS; notFound() returns genuine 404 for invalid, unavailable, and unpublished slugs",
+    "preservation": "PASS; AnimationRuntime, GSAP/ScrollTrigger, canvas, frames, pricing, hero, and dashboard URL unchanged",
+    "validation": {
+      "npm ci": "PASS",
+      "npm run lint": "PASS",
+      "npm run typecheck": "PASS",
+      "npm run test:seo": "PASS",
+      "npm run test:r2": "PASS",
+      "npm run test:r3": "PASS",
+      "npm run test:blog": "PASS",
+      "npm run build": "PASS",
+      "existing SEO/R3/R4 smoke": "PASS",
+      "npm run test:blog:smoke": "PASS",
+      "CMS fixture smoke": "PASS",
+      "external deployment": "NOT_PERFORMED"
+    },
+    "artifact": "docs/blog-content-provider.md"
   },
   "nextStage": "NONE",
   "projectStatus": "COMPLETE",

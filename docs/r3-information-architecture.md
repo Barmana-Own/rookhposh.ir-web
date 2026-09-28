@@ -58,7 +58,7 @@ The existing homepage remains the primary entry point and now links to these rou
 | `/about/` | Not created | No approved company history, team, mission, or other distinct factual narrative was supplied. |
 | `/contact/` | Not created | The repository has a phone number and address, but no approved contact workflow or additional content sufficient for a useful standalone page. They remain visible in the shared footer. |
 | `/terms/` and `/privacy/` | Not created | Binding legal copy and approved production routes were not supplied. Placeholder legal pages would be misleading. |
-| `/blog/` | Not created | `blog.rookhposh.ir` is an external related host and was not reimplemented or assumed healthy. |
+| `/blog/` | Not created at R3 time | The first-party Blog was intentionally deferred to Prompt 02; the external `blog.rookhposh.ir` host was not treated as a route of this app. |
 
 ## INTERNAL LINK MAP
 
@@ -126,3 +126,11 @@ The dashboard, blog, trust-seal URL, legal placeholders, private routes, redirec
 R3 preserves the existing homepage visual experience and R2 animation boundary. It adds a small set of distinct, factual, internally linked pages instead of a thin-page collection.
 
 R3_STATUS: PASS_WITH_DOCUMENTED_OWNER_DECISIONS
+
+## Prompt 02 incremental update — first-party Blog foundation
+
+Prompt 02 supersedes the R3-time Blog deferral without turning this repository into a CMS. The public presentation now exposes `/blog/` and `/blog/[slug]/`, reads only validated published records from the optional `BLOG_CONTENT_API_URL`, and renders a truthful empty state when no provider is configured. The public header/footer use `/blog/`; `blog.rookhposh.ir` is not the primary article destination.
+
+The Blog index and article pages are server-rendered and use route-specific metadata, canonical URLs, breadcrumbs, publication/update dates, and a noindex policy for empty or explicitly noindex content. The sitemap adds the Blog index and article URLs only when validated indexable posts exist. Missing, unpublished, malformed, unavailable, or invalid-slug content returns the application 404. Markdown content is rendered with `react-markdown` and `rehype-sanitize`, with raw HTML disabled.
+
+At the Prompt 02 validation checkpoint, no CMS URL was configured, so no article was fabricated or indexed. Default empty-state production smoke, source validation, CMS fixture integration smoke, typecheck, lint, build, and the existing SEO/R2/R3 smoke suites passed. External deployment remains outside this source change.

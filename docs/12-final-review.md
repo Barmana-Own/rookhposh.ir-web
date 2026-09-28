@@ -139,3 +139,50 @@ The live host is serving an older deployment. HTTPS redirect passed, but the liv
 The original Stage 12 source release gate remains PASS for the repository. The separate R4 production gate is `FAIL_WITH_DEPLOYMENT_BLOCKERS` until the verified build is deployed and the live host is rechecked. See [`docs/r4-production-seo-verification.md`](r4-production-seo-verification.md).
 
 R4_STATUS: FAIL_WITH_DEPLOYMENT_BLOCKERS
+
+## Prompt 02 incremental final review — 2026-09-28
+
+### Release verdict
+
+PASS for the repository-scoped first-party Blog foundation. The marketing application now owns the public Blog presentation at `/blog/` and `/blog/[slug]/` while article authoring remains outside the repository. The implementation preserves the homepage, animation runtime, frame inventory, pricing, dashboard URL, and existing public routes.
+
+### Implementation traceability
+
+| Requirement | Evidence | Result |
+| --- | --- | --- |
+| Content-provider boundary | `lib/blog/types.ts`, `lib/blog/client.ts`, `lib/blog/repository.ts`, `docs/blog-content-provider.md` | PASS |
+| Optional CMS configuration | `.env.example`, server-only `BLOG_CONTENT_API_URL` reads, timeout and response-size bounds | PASS |
+| Published-only public content | Provider query plus boundary validation of status, publication date, shape, URLs, and noindex | PASS |
+| Blog index | `app/blog/page.tsx`, `components/blog/BlogCard.tsx`, empty state, product CTA | PASS |
+| Blog article | `app/blog/[slug]/page.tsx`, metadata, breadcrumb, article body, dates, tags, related content, CTA | PASS |
+| Missing/unpublished content | `notFound()` and production smoke | PASS |
+| Content rendering safety | `react-markdown`, `rehype-sanitize`, `skipHtml`, Markdown image suppression | PASS |
+| Dynamic crawl surface | `app/sitemap.ts`, no-CMS exclusion, indexable-post filtering | PASS |
+| Homepage/animation preservation | Protected-file diff review; `components/sections/AnimationRuntime.tsx` and `public/frames` unchanged | PASS |
+
+### Validation evidence
+
+| Check | Status | Evidence |
+| --- | --- | --- |
+| `npm ci` | PASS | Clean install completed; 0 reported vulnerabilities |
+| `npm run lint` | PASS | Executed after Blog implementation |
+| `npm run typecheck` | PASS | Executed after Blog implementation |
+| `npm run test:seo` | PASS | Existing SEO source contract |
+| `npm run test:r2` | PASS | 535-frame regression contract |
+| `npm run test:r3` | PASS | Existing route/navigation contract |
+| `npm run test:blog` | PASS | Blog source/provider/safety assertions |
+| `npm run build` | PASS | Next.js 16 production build generated `/blog`, `/blog/[slug]`, crawl routes, and existing routes |
+| `npm run test:seo:smoke` | PASS | Controlled production HTTP smoke |
+| `npm run test:r3:smoke` | PASS | Existing R3 controlled smoke; no-CMS Blog remains noindex and absent from sitemap |
+| `npm run test:r4:smoke` | PASS | Controlled production SEO smoke |
+| `npm run test:blog:smoke` | PASS | Empty-state 200, missing-slug 404, sitemap exclusion |
+| CMS fixture integration smoke | PASS | Published article rendered, draft excluded with 404, Markdown script was not emitted |
+| Live deployment | NOT_PERFORMED | No push, DNS change, or authorized production deployment in this source task |
+
+### Security and integrity review
+
+The provider sends no secret or authorization header, bounds the request timeout and response size, validates external payloads before rendering, allows only safe asset/canonical URL forms, and converts failures to empty state/404 behavior. Article Markdown is sanitized and raw HTML is disabled. No authentication, database, editor, write API, or production mock was introduced. No protected homepage animation, frame asset, pricing value, route, or dashboard URL was removed.
+
+The previous R4 live-deployment drift remains an external release blocker: the public host must receive this verified source revision and be rechecked separately. The external `blog.rookhposh.ir` host remains a separate operational dependency and is not used as the public Blog route.
+
+PROMPT_02_STATUS: PASS

@@ -3,7 +3,8 @@
 ## Non-blocking
 
 - The optimized static brand asset is 768×512, but it is not a purpose-built 1200×630 social card, so social platforms may still crop it differently.
-- The blog, dashboard, and trust-seal services are separate external systems; their availability and SEO configuration are not validated by this repository.
+- The public Blog presentation is now owned by this repository, but article authoring/content availability depends on the optional external `BLOG_CONTENT_API_URL`; the separate `blog.rookhposh.ir` host and trust-seal service remain outside repository control.
+- No CMS URL is configured in the validated local environment, so `/blog/` correctly renders an empty `noindex` state and no article URLs are emitted in the sitemap until published content is supplied.
 - Approved Terms of Use and Privacy Policy copy/routes were not supplied. The corresponding footer labels remain non-interactive so the site does not link to misleading content.
 - The visual story still contains 535 WebP frames totaling 10.89 MiB by design. R2 bounds initial scheduling and concurrency but does not remove the asset workload.
 - Lighthouse, protocol-level request timing, reduced-motion media emulation, and field Core Web Vitals remain unavailable in the current environment.

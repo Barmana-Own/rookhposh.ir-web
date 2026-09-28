@@ -15,6 +15,7 @@ const routeFiles = [
 for (const relativePath of [
   "components/marketing/MobileNav.tsx",
   "app/blog/page.tsx",
+  "app/blog/[slug]/page.tsx",
   "app/not-found.tsx",
 ]) {
   try {
@@ -92,9 +93,16 @@ for (const marker of ["aria-expanded", "aria-controls", "hidden={!isOpen}", "Esc
 }
 
 const blog = await readRequired("app/blog/page.tsx");
-for (const marker of ["index: false", "Prompt 02"]) {
+for (const marker of ["getPublishedPosts", "generateMetadata", "BlogProductCta"]) {
   if (!blog.includes(marker)) {
-    failures.push(`Missing temporary blog marker "${marker}"`);
+    failures.push(`Missing Blog implementation marker "${marker}"`);
+  }
+}
+
+const blogArticle = await readRequired("app/blog/[slug]/page.tsx");
+for (const marker of ["getPublishedPostBySlug", "notFound()", "BlogContent"]) {
+  if (!blogArticle.includes(marker)) {
+    failures.push(`Missing Blog article marker "${marker}"`);
   }
 }
 
