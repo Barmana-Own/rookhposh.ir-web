@@ -1,4 +1,4 @@
-# گزارش تحویل مشتری — زیرساخت Blog داخلی Prompt 02
+# گزارش تحویل مشتری — SEO مقاله و کشف Blog در Prompt 03
 
 | مشخصه | مقدار |
 | --- | --- |
@@ -7,13 +7,13 @@
 | زبان | فارسی |
 | تاریخ جلالی | ۱۴۰۵-۰۷-۰۶ |
 | تاریخ میلادی | 2026-09-28 |
-| revision سورس | `d635b02e6754a35c1fdbfed32eb8c41b052e3177` |
+| revision سورس | `800ba8932bddef0c45eaed9a1e2ec6abd987fccf` |
 | branch | `feature/r5-prompt-01-navigation` |
 | وضعیت تحویل | پیاده‌سازی سورس کامل؛ انتشار خارجی انجام نشده است |
 
 ## خلاصه مدیریتی
 
-زیرساخت Blog عمومی و first-party روی دامنه `rookhposh.ir` اضافه شد، بدون تغییر در طراحی تأییدشده homepage، قیمت‌ها، مقصد dashboard یا تجربه انیمیشن ۵۳۵ فریمی.
+زیرساخت Blog عمومی first-party و لایه SEO/کشف مقاله روی دامنه `rookhposh.ir` تحویل شد، بدون تغییر در طراحی تأییدشده homepage، قیمت‌ها، مقصد dashboard یا تجربه انیمیشن ۵۳۵ فریمی.
 
 ## قابلیت‌های تحویل‌شده
 
@@ -42,6 +42,10 @@ runtime انیمیشن تأییدشده، رفتار GSAP/ScrollTrigger، منط
 | smokeهای تولیدی SEO/R3/R4 موجود | PASS |
 | smoke حالت خالی Blog | PASS |
 | smoke با CMS آزمایشی | PASS؛ مقاله منتشرشده نمایش داده شد، draft حذف شد و script در خروجی نیامد |
+| fixture متادیتا و structured data مقاله | PASS؛ metadata مقاله، JSON-LDهای BlogPosting/BreadcrumbList، canonical و فیلدهای نویسنده/تاریخ بررسی شد |
+| fixture sitemap/feed پویا | PASS؛ محتوای published و indexable اضافه و draft/noindex حذف شد |
+| smoke RSS و social card | PASS؛ content type مربوط به RSS و PNG قطعی ۱۲۰۰×۶۳۰ بررسی شد |
+| پاک‌سازی هویت Organization | PASS؛ Blog قدیمی از `sameAs` حذف شد |
 | انتشار خارجی | NOT_PERFORMED |
 
 ## نیاز عملیاتی باقی‌مانده
@@ -50,4 +54,14 @@ runtime انیمیشن تأییدشده، رفتار GSAP/ScrollTrigger، منط
 
 ## محدوده دقیق پیاده‌سازی
 
-این تغییر شامل routeها و componentهای Blog، boundary محتوای `lib/blog/`، styleهای scoped، template محیطی اختیاری، تست‌های source/HTTP مربوط به Blog، به‌روزرسانی lockfile و مستندات فنی و وضعیت release است.
+این تغییر شامل routeها و componentهای Blog، boundary محتوای `lib/blog/`، metadata و JSON-LD مقاله، sitemap پویا، RSS escape‌شده در `/feed.xml`، social card قطعی `/opengraph-image` با ابعاد ۱۲۰۰×۶۳۰، لینک‌های داخلی زمینه‌ای، styleهای scoped، template محیطی اختیاری، تست‌های source/HTTP/fixture مربوط به Blog، به‌روزرسانی lockfile و مستندات فنی و وضعیت release است.
+
+## به‌روزرسانی تحویل Prompt 03
+
+- هر مقاله منتشرشده اکنون fallbackهای معتبر SEO، canonical روی دامنه اصلی، فیلدهای Open Graph/Twitter مقاله، تاریخ انتشار/به‌روزرسانی، metadata نویسنده و رفتار `index/follow` یا `noindex` صریح دارد.
+- صفحه مقاله JSON-LD نوع `BlogPosting` را با ارجاع به Organization موجود رخ پوش و `BreadcrumbList` منطبق با breadcrumb قابل مشاهده تولید می‌کند.
+- `/sitemap.xml` به‌صورت request-time از CMS استفاده می‌کند، هنگام خطای provider routeهای ثابت بازاریابی را حفظ می‌کند و فقط محتوای published و indexable Blog را اضافه می‌کند.
+- `/feed.xml` یک RSS عمومی و escape‌شده فقط برای مقاله‌های published و indexable است. `/opengraph-image` یک PNG قطعی با ابعاد ۱۲۰۰×۶۳۰ ارائه می‌دهد.
+- صفحه «برای فروشگاه‌ها» اکنون به `/blog` لینک می‌دهد و Blog قدیمی به‌عنوان سیگنال هویت `sameAs` در Organization استفاده نمی‌شود.
+
+revision سورس به‌صورت محلی بررسی شده است. در این کار deploy خارجی، تغییر DNS، پیکربندی CMS یا ادعای index شدن زنده انجام نشده است. دامنه عمومی همچنان باید با این revision deploy و سپس دوباره بررسی شود.

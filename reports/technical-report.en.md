@@ -1,4 +1,4 @@
-# Technical Delivery Report — Prompt 02 First-Party Blog Foundation
+# Technical Delivery Report — Prompt 02 and Prompt 03 Blog Delivery
 
 | Field | Value |
 | --- | --- |
@@ -7,7 +7,7 @@
 | Language | English |
 | Jalali date | ۱۴۰۵-۰۷-۰۶ |
 | Gregorian date | 2026-09-28 |
-| Source revision | `d635b02e6754a35c1fdbfed32eb8c41b052e3177` |
+| Source revision | `800ba8932bddef0c45eaed9a1e2ec6abd987fccf` |
 | Branch | `feature/r5-prompt-01-navigation` |
 | Delivery status | IMPLEMENTED; external deployment not performed |
 
@@ -81,6 +81,39 @@ The Blog index and article route are dynamic server-rendered App Router pages. W
 
 Article body content is rendered through `react-markdown` with `rehype-sanitize` and `skipHtml`. No raw unsanitized `dangerouslySetInnerHTML` is used for CMS content; Markdown images are suppressed in favor of the validated featured-image field.
 
+## Prompt 03 incremental implementation
+
+### Exact files and responsibilities
+
+| File | Change |
+| --- | --- |
+| `app/blog/[slug]/page.tsx` | Adds article Open Graph locale/site metadata, safe related-post filtering, and server-rendered `BlogPosting` JSON-LD. |
+| `app/blog/page.tsx` | Adds distinct Blog metadata and an RSS alternate link while preserving empty/indexable robots behavior. |
+| `components/seo/BlogPostingStructuredData.tsx` | Serializes supported `BlogPosting` fields only, including validated image, dates, author, Organization publisher reference, canonical main entity, and `fa-IR`. |
+| `components/seo/JsonLd.tsx` | Centralizes safe JSON-LD serialization, escaping script-breaking characters before insertion. |
+| `components/seo/StructuredData.tsx` | Reuses the safe serializer and removes the unverified `blog.rookhposh.ir` `sameAs` value. |
+| `components/marketing/Breadcrumbs.tsx` | Reuses the safe serializer for visible-breadcrumb JSON-LD. |
+| `app/sitemap.ts` | Uses request-time generation so CMS publication state is reflected without rebuilding and static routes survive provider failure. |
+| `app/feed.xml/route.ts` | Adds escaped RSS 2.0 with canonical article links, publication dates, categories/authors when present, and published/indexable filtering. |
+| `app/opengraph-image.tsx` | Adds a deterministic 1200×630 PNG social-card route. |
+| `lib/marketing.ts`, `app/layout.tsx` | Makes the deterministic large social card the site-wide Open Graph/Twitter asset. |
+| `app/for-online-stores/page.tsx`, `app/globals.css` | Adds a restrained contextual Blog link and the smallest responsive spacing adjustment. |
+| `scripts/smoke-blog-fixture.mjs` | Runs an isolated mock-CMS/production-server check for article metadata, structured data, sanitization, dynamic sitemap, and RSS inclusion/exclusion. |
+| `scripts/smoke-blog.mjs`, `scripts/validate-blog.mjs`, `scripts/validate-seo.mjs`, `package.json` | Extends no-CMS smoke/source contracts and exposes the fixture test command. |
+| `docs/blog-content-provider.md`, `docs/10-known-issues.md`, `docs/12-final-review.md`, `README.md`, `project-integrity-manifest.md`, `project-state.json`, `release-manifest.json` | Records Prompt 03 behavior, risks, integrity, validation, and release artifacts. |
+
+### Metadata and URL validation
+
+Article metadata uses `seoTitle`/`title`, `metaDescription`/`excerpt`, approved same-origin canonical overrides or the normalized main-domain article URL, article Open Graph type, published/modified dates, author, and large Twitter cards. The provider boundary accepts canonical overrides only on the configured site origin and accepts asset URLs only when relative or HTTPS. Invalid records are discarded before metadata, schema, sitemap, or feed generation.
+
+### Structured data and discovery
+
+Article pages emit `BlogPosting` and the shared visible breadcrumb emits `BreadcrumbList`. The article schema references the site Organization entity, uses `inLanguage: fa-IR`, and does not synthesize ratings, reviews, offers, or other unsupported claims. Sitemap and feed routes consume the same validated published repository; `noindex` records are excluded from both. The Blog index advertises `/feed.xml` through the Metadata API.
+
+### Social card implementation note
+
+The first production build exposed an unsupported complex-font rendering failure in the new `ImageResponse` route. The route was repaired by reducing the rendered copy to a reliable minimal brand card while retaining the required 1200×630 PNG output. The repaired build and HTTP smoke passed.
+
 ## Preservation and security review
 
 - `components/sections/AnimationRuntime.tsx`: unchanged.
@@ -103,17 +136,19 @@ Article body content is rendered through `react-markdown` with `rehype-sanitize`
 | `npm run test:r2` | PASS; 535 frames verified |
 | `npm run test:r3` | PASS |
 | `npm run test:blog` | PASS |
-| `npm run build` | PASS; `/blog` and `/blog/[slug]` are dynamic routes and all existing routes generated |
+| `npm run build` | PASS; `/blog`, `/blog/[slug]`, `/feed.xml`, and `/sitemap.xml` are dynamic; `/opengraph-image` is generated as a static image route |
 | `npm run test:seo:smoke` | PASS |
 | `npm run test:r3:smoke` | PASS |
 | `npm run test:r4:smoke` | PASS |
 | `npm run test:blog:smoke` | PASS |
-| CMS fixture integration smoke | PASS; published post rendered, draft returned 404, and `<script>` payload was not emitted |
+| `npm run test:blog:fixture` | PASS; normal sandbox attempt was `spawn EPERM`, elevated rerun passed; published article metadata/schema/sitemap/feed behavior and sanitizer were verified |
+| CMS fixture integration smoke | PASS; published post rendered, draft returned 404, noindex/draft entries were excluded, and `<script>` payload was not emitted |
 | Git diff check | PASS; no whitespace errors |
+| `npm audit --omit=dev` | PASS; 0 vulnerabilities |
 | External deployment | NOT_PERFORMED |
 
-The first ordinary sandboxed build/install attempts encountered Windows `spawn EPERM` process/file-lock limitations. The permitted reruns of `npm ci` and `npm run build` completed successfully; this was classified as an environment limitation, not a source failure.
+The first ordinary sandboxed build and Blog fixture attempts encountered Windows `spawn EPERM` process/file-lock limitations. The permitted reruns of `npm ci`, `npm run build`, and `npm run test:blog:fixture` completed successfully; these were classified as environment limitations, not source failures.
 
 ## Deployment and rollback
 
-No Git push, DNS change, dashboard change, or production deployment was performed. Deploy the committed source revision only after configuring an approved public CMS endpoint and then repeat the live SEO/Blog verification. The preceding source checkpoint is `c3552cb`; the Prompt 02 implementation revision is `d635b02e6754a35c1fdbfed32eb8c41b052e3177`.
+No Git push, DNS change, dashboard change, or production deployment was performed. Deploy `800ba8932bddef0c45eaed9a1e2ec6abd987fccf` only after configuring an approved public CMS endpoint and then repeat the live SEO/Blog verification. The Prompt 03 source change preserves the Prompt 02 content-provider boundary and does not claim live indexing or ranking outcomes.

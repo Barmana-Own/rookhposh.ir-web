@@ -1,4 +1,4 @@
-# گزارش فنی تحویل — زیرساخت Blog داخلی Prompt 02
+# گزارش فنی تحویل — تحویل Blog در Prompt 02 و Prompt 03
 
 | مشخصه | مقدار |
 | --- | --- |
@@ -7,7 +7,7 @@
 | زبان | فارسی |
 | تاریخ جلالی | ۱۴۰۵-۰۷-۰۶ |
 | تاریخ میلادی | 2026-09-28 |
-| revision سورس | `d635b02e6754a35c1fdbfed32eb8c41b052e3177` |
+| revision سورس | `800ba8932bddef0c45eaed9a1e2ec6abd987fccf` |
 | branch | `feature/r5-prompt-01-navigation` |
 | وضعیت تحویل | IMPLEMENTED؛ انتشار خارجی انجام نشده است |
 
@@ -81,6 +81,39 @@ canonical ارائه‌شده از content فقط وقتی پذیرفته می�
 
 بدنه مقاله با `react-markdown`، `rehype-sanitize` و `skipHtml` رندر می‌شود. برای محتوای CMS از `dangerouslySetInnerHTML` خام استفاده نشده است و تصویرهای Markdown برای تکیه بر field معتبر featured image حذف می‌شوند.
 
+## پیاده‌سازی افزایشی Prompt 03
+
+### فایل‌ها و مسئولیت‌های دقیق
+
+| فایل | تغییر |
+| --- | --- |
+| `app/blog/[slug]/page.tsx` | افزودن metadata مربوط به locale/site در Open Graph مقاله، فیلتر امن مطالب مرتبط و JSON-LD نوع `BlogPosting` در server rendering. |
+| `app/blog/page.tsx` | افزودن metadata مستقل Blog و alternate مربوط به RSS با حفظ رفتار robots برای empty/indexable. |
+| `components/seo/BlogPostingStructuredData.tsx` | تولید فقط فیلدهای پشتیبانی‌شده `BlogPosting` شامل تصویر معتبر، تاریخ‌ها، نویسنده، ارجاع publisher به Organization، main entity canonical و `fa-IR`. |
+| `components/seo/JsonLd.tsx` | متمرکزکردن serialization امن JSON-LD و escape کاراکترهایی که می‌توانند script را بشکنند. |
+| `components/seo/StructuredData.tsx` | استفاده از serializer امن و حذف مقدار تأییدنشده `sameAs` برای `blog.rookhposh.ir`. |
+| `components/marketing/Breadcrumbs.tsx` | استفاده مجدد از serializer امن برای JSON-LD breadcrumb قابل مشاهده. |
+| `app/sitemap.ts` | request-time شدن تولید sitemap برای انعکاس وضعیت انتشار CMS بدون rebuild و حفظ routeهای ثابت هنگام خطای provider. |
+| `app/feed.xml/route.ts` | افزودن RSS 2.0 escape‌شده با لینک canonical مقاله، تاریخ انتشار، category/author در صورت وجود و فیلتر published/indexable. |
+| `app/opengraph-image.tsx` | افزودن route قطعی PNG social card با ابعاد ۱۲۰۰×۶۳۰. |
+| `lib/marketing.ts`, `app/layout.tsx` | استفاده از social card بزرگ قطعی برای Open Graph/Twitter کل سایت. |
+| `app/for-online-stores/page.tsx`, `app/globals.css` | افزودن لینک زمینه‌ای محدود به Blog و کوچک‌ترین اصلاح فاصله responsive. |
+| `scripts/smoke-blog-fixture.mjs` | smoke ایزوله mock-CMS/production برای metadata، structured data، sanitization، sitemap پویا و inclusion/exclusion در RSS. |
+| `scripts/smoke-blog.mjs`, `scripts/validate-blog.mjs`, `scripts/validate-seo.mjs`, `package.json` | گسترش smoke/contractهای no-CMS و اضافه‌کردن command تست fixture. |
+| `docs/blog-content-provider.md`, `docs/10-known-issues.md`, `docs/12-final-review.md`, `README.md`, `project-integrity-manifest.md`, `project-state.json`, `release-manifest.json` | ثبت رفتار Prompt 03، ریسک‌ها، integrity، اعتبارسنجی و artifactهای release. |
+
+### اعتبارسنجی metadata و URL
+
+metadata مقاله از `seoTitle`/`title`، `metaDescription`/`excerpt`، canonical override تأییدشده روی همان origin یا URL نرمال‌شده مقاله در دامنه اصلی، نوع article در Open Graph، تاریخ‌های انتشار/به‌روزرسانی، نویسنده و Twitter card بزرگ استفاده می‌کند. مرز provider فقط canonical override روی origin سایت و assetهای relative یا HTTPS را می‌پذیرد. record نامعتبر پیش از تولید metadata، schema، sitemap یا feed حذف می‌شود.
+
+### structured data و کشف محتوا
+
+صفحه مقاله `BlogPosting` و breadcrumb قابل مشاهده مشترک `BreadcrumbList` تولید می‌کند. schema مقاله به Organization سایت ارجاع می‌دهد، `inLanguage: fa-IR` دارد و rating، review، offer یا ادعای پشتیبانی‌نشده نمی‌سازد. routeهای sitemap و feed از همان repository معتبر published استفاده می‌کنند و recordهای `noindex` را از هر دو حذف می‌کنند. صفحه Blog از طریق Metadata API به `/feed.xml` اشاره می‌کند.
+
+### یادداشت پیاده‌سازی social card
+
+اولین build تولیدی خطای runtime مربوط به پشتیبانی‌نشدن رندر فونت پیچیده در route جدید `ImageResponse` را آشکار کرد. route با کاهش متن به یک brand card ساده و قابل اتکا اصلاح شد و خروجی الزامی PNG با ابعاد ۱۲۰۰×۶۳۰ حفظ شد. build اصلاح‌شده و HTTP smoke با موفقیت گذشتند.
+
 ## بررسی حفظ و امنیت
 
 - `components/sections/AnimationRuntime.tsx`: بدون تغییر.
@@ -103,17 +136,19 @@ canonical ارائه‌شده از content فقط وقتی پذیرفته می�
 | `npm run test:r2` | PASS؛ بررسی ۵۳۵ فریم |
 | `npm run test:r3` | PASS |
 | `npm run test:blog` | PASS |
-| `npm run build` | PASS؛ routeهای `/blog` و `/blog/[slug]` پویا و routeهای قبلی نیز تولید شدند |
+| `npm run build` | PASS؛ `/blog`، `/blog/[slug]`، `/feed.xml` و `/sitemap.xml` پویا هستند و `/opengraph-image` به‌صورت image route تولید می‌شود |
 | `npm run test:seo:smoke` | PASS |
 | `npm run test:r3:smoke` | PASS |
 | `npm run test:r4:smoke` | PASS |
 | `npm run test:blog:smoke` | PASS |
-| smoke integration با CMS آزمایشی | PASS؛ post منتشرشده رندر شد، draft به 404 رسید و payload شامل `<script>` در خروجی نیامد |
+| `npm run test:blog:fixture` | PASS؛ اجرای عادی sandbox با `spawn EPERM` مواجه شد و اجرای مجاز مجدد موفق بود؛ metadata/schema/sitemap/feed مقاله و sanitizer بررسی شد |
+| smoke integration با CMS آزمایشی | PASS؛ post منتشرشده رندر شد، draft به 404 رسید، draft/noindex از discovery حذف شدند و payload شامل `<script>` در خروجی نیامد |
 | بررسی Git diff | PASS؛ خطای whitespace وجود نداشت |
+| `npm audit --omit=dev` | PASS؛ ۰ آسیب‌پذیری |
 | انتشار خارجی | NOT_PERFORMED |
 
-اولین اجرای install/build در sandbox با محدودیت process/file-lock ویندوزی `spawn EPERM` مواجه شد. اجرای مجاز مجدد `npm ci` و `npm run build` با موفقیت پایان یافت؛ این مورد محدودیت محیط و نه خطای سورس طبقه‌بندی شد.
+اولین اجرای build و fixture Blog در sandbox با محدودیت process/file-lock ویندوزی `spawn EPERM` مواجه شد. اجرای مجاز مجدد `npm ci`، `npm run build` و `npm run test:blog:fixture` با موفقیت پایان یافت؛ این موارد محدودیت محیط و نه خطای سورس طبقه‌بندی شدند.
 
 ## انتشار و rollback
 
-Git push، تغییر DNS، تغییر dashboard یا انتشار Production انجام نشد. فقط پس از تنظیم endpoint عمومی CMS تأییدشده deploy و سپس بررسی زنده SEO/Blog تکرار شود. checkpoint قبلی `c3552cb` و revision پیاده‌سازی Prompt 02 برابر است با `d635b02e6754a35c1fdbfed32eb8c41b052e3177`.
+Git push، تغییر DNS، تغییر dashboard یا انتشار Production انجام نشد. پس از تنظیم endpoint عمومی CMS تأییدشده، revision `800ba8932bddef0c45eaed9a1e2ec6abd987fccf` deploy و بررسی زنده SEO/Blog تکرار شود. تغییر Prompt 03 مرز content-provider در Prompt 02 را حفظ می‌کند و ادعای index یا ranking زنده ندارد.
