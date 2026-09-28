@@ -68,7 +68,15 @@ function readCanonicalUrl(value: unknown) {
       return null;
     }
 
-    return url.origin === SITE_ORIGIN ? url.toString() : null;
+    if (url.origin !== SITE_ORIGIN) {
+      return null;
+    }
+
+    url.pathname = url.pathname === "/" ? "/" : `${url.pathname.replace(/\/+$/, "")}/`;
+    url.search = "";
+    url.hash = "";
+
+    return url.toString();
   } catch {
     return null;
   }
