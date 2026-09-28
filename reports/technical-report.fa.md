@@ -7,7 +7,7 @@
 | زبان | فارسی |
 | تاریخ جلالی | ۱۴۰۵-۰۷-۰۶ |
 | تاریخ میلادی | 2026-09-28 |
-| revision سورس | `478b880d7ee96c268fc7d6c36c104d2bfb42c2a6` |
+| revision سورس | `d635b02e6754a35c1fdbfed32eb8c41b052e3177` |
 | branch | `feature/r5-prompt-01-navigation` |
 | وضعیت تحویل | IMPLEMENTED؛ انتشار خارجی انجام نشده است |
 
@@ -116,4 +116,4 @@ canonical ارائه‌شده از content فقط وقتی پذیرفته می�
 
 ## انتشار و rollback
 
-Git push، تغییر DNS، تغییر dashboard یا انتشار Production انجام نشد. فقط پس از تنظیم endpoint عمومی CMS تأییدشده deploy و سپس بررسی زنده SEO/Blog تکرار شود. checkpoint قبلی `c3552cb` و revision پیاده‌سازی Prompt 02 برابر است با `478b880d7ee96c268fc7d6c36c104d2bfb42c2a6`.
+Git push، تغییر DNS، تغییر dashboard یا انتشار Production انجام نشد. فقط پس از تنظیم endpoint عمومی CMS تأییدشده deploy و سپس بررسی زنده SEO/Blog تکرار شود. checkpoint قبلی `c3552cb` و revision پیاده‌سازی Prompt 02 برابر است با `d635b02e6754a35c1fdbfed32eb8c41b052e3177`.
