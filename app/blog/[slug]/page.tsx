@@ -6,8 +6,10 @@ import BlogDate from "@/components/blog/BlogDate";
 import BlogImage from "@/components/blog/BlogImage";
 import BlogProductCta from "@/components/blog/BlogProductCta";
 import BlogCard from "@/components/blog/BlogCard";
+import BlogPostingStructuredData from "@/components/seo/BlogPostingStructuredData";
 import { getPublishedPostBySlug, getPublishedPosts } from "@/lib/blog/repository";
 import { publicUrl, SOCIAL_IMAGE } from "@/lib/marketing";
+import { SITE_NAME } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -38,6 +40,8 @@ export async function generateMetadata({ params }: BlogArticlePageProps): Promis
     openGraph: {
       type: "article",
       url: canonical,
+      locale: "fa_IR",
+      siteName: SITE_NAME,
       title: post.ogTitle ?? title,
       description: post.ogDescription ?? description,
       publishedTime: post.publishedAt,
@@ -72,10 +76,12 @@ export default async function BlogArticlePage({ params }: BlogArticlePageProps) 
     .filter(
       (candidate) =>
         candidate.slug !== post.slug &&
+        !candidate.noindex &&
         post.category &&
         candidate.category === post.category,
     )
     .slice(0, 3);
+  const canonical = post.canonicalUrl ?? publicUrl(`/blog/${post.slug}`);
 
   return (
     <MarketingPageShell
@@ -85,6 +91,7 @@ export default async function BlogArticlePage({ params }: BlogArticlePageProps) 
       title={post.title}
       description={post.excerpt}
     >
+      <BlogPostingStructuredData canonical={canonical} post={post} />
       <article className="blog-article" aria-labelledby="blog-article-details">
         <header className="blog-article__header" id="blog-article-details">
           <div className="blog-article__meta">

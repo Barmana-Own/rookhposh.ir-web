@@ -360,6 +360,10 @@ a {
   color: #0a0a0b;
 }
 
+.content-page__callout--compact .content-page__button + .content-page__button {
+  margin-inline-start: 0.5rem;
+}
+
 .content-page__pricing-grid {
   margin-top: 0;
 }
@@ -2133,5 +2137,10 @@ a {
 
   .content-page__button {
     width: 100%;
+  }
+
+  .content-page__callout--compact .content-page__button + .content-page__button {
+    margin-inline-start: 0;
+    margin-top: 0.6rem;
   }
 }

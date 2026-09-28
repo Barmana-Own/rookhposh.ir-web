@@ -16,24 +16,28 @@ const BLOG_EMPTY_DESCRIPTION =
 export async function generateMetadata(): Promise<Metadata> {
   const posts = await getPublishedPosts();
   const indexable = posts.some((post) => !post.noindex);
+  const description = posts.length > 0 ? BLOG_DESCRIPTION : BLOG_EMPTY_DESCRIPTION;
 
   return {
     title: "مقالات رخ پوش",
-    description: posts.length > 0 ? BLOG_DESCRIPTION : BLOG_EMPTY_DESCRIPTION,
-    alternates: { canonical: publicUrl("/blog") },
+    description,
+    alternates: {
+      canonical: publicUrl("/blog"),
+      types: { "application/rss+xml": publicUrl("/feed.xml") },
+    },
     openGraph: {
       type: "website",
       url: publicUrl("/blog"),
       locale: "fa_IR",
       siteName: SITE_NAME,
       title: "مقالات رخ پوش",
-      description: BLOG_DESCRIPTION,
+      description,
       images: [SOCIAL_IMAGE],
     },
     twitter: {
       card: "summary_large_image",
       title: "مقالات رخ پوش",
-      description: BLOG_DESCRIPTION,
+      description,
       images: [SOCIAL_IMAGE.url],
     },
     robots: {

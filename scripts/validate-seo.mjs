@@ -10,6 +10,9 @@ const requiredFiles = [
   "app/robots.ts",
   "app/sitemap.ts",
   "components/seo/StructuredData.tsx",
+  "components/seo/JsonLd.tsx",
+  "app/opengraph-image.tsx",
+  "app/feed.xml/route.ts",
   "components/sections/AnimationRuntime.tsx",
   "components/sections/LoaderSection.tsx",
   "components/marketing/PublicHeader.tsx",
@@ -27,7 +30,10 @@ const requiredSnippets = new Map([
   ["app/layout.tsx", ["metadataBase", "alternates", "openGraph", "twitter", "robots"]],
   ["app/robots.ts", ["MetadataRoute.Robots", "sitemap", "allow"]],
   ["app/sitemap.ts", ["MetadataRoute.Sitemap", "PUBLIC_INDEXABLE_ROUTES", "publicUrl"]],
-  ["components/seo/StructuredData.tsx", ["application/ld+json", '"@graph"', '"@type": "Organization"']],
+  ["components/seo/StructuredData.tsx", ["JsonLd", '"@graph"', '"@type": "Organization"']],
+  ["components/seo/JsonLd.tsx", ["application/ld+json", "serializeJsonLd", "dangerouslySetInnerHTML"]],
+  ["app/opengraph-image.tsx", ["ImageResponse", "width: 1200", "height: 630"]],
+  ["app/feed.xml/route.ts", ["application/rss+xml", "escapeXml", "getPublishedPosts"]],
   ["components/sections/OctabootExperience.tsx", ["aria-labelledby=\"journey-title\"", "scene--fallback", "AnimationRuntime", "id=\"faq\""]],
   ["components/sections/AnimationRuntime.tsx", ["\"use client\"", "MAX_CONCURRENT_DOWNLOADS", "prefers-reduced-motion: reduce", "image.onerror", "image.src = \"\""]],
   ["components/sections/LoaderSection.tsx", ["loaderStatus", "role=\"status\"", "rookhposh-mark.webp"]],
@@ -45,6 +51,7 @@ const forbiddenSnippets = new Map([
   ["components/sections/OctabootExperience.tsx", ["\"use client\"", "<noscript>"]],
   ["components/marketing/PublicHeader.tsx", ["blog.rookhposh.ir"]],
   ["components/marketing/PublicFooter.tsx", ["blog.rookhposh.ir"]],
+  ["components/seo/StructuredData.tsx", ["blog.rookhposh.ir", "sameAs"]],
 ]);
 
 const failures = [];

@@ -15,7 +15,8 @@
     "test:seo:smoke": "node scripts/smoke-seo.mjs",
     "test:r3:smoke": "node scripts/smoke-r3.mjs",
     "test:r4:smoke": "node scripts/smoke-r4.mjs",
-    "test:blog:smoke": "node scripts/smoke-blog.mjs"
+    "test:blog:smoke": "node scripts/smoke-blog.mjs",
+    "test:blog:fixture": "node scripts/smoke-blog-fixture.mjs"
   },
   "dependencies": {
     "@fontsource/vazirmatn": "^5.3.0",

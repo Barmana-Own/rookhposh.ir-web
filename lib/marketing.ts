@@ -6,10 +6,10 @@ import {
 } from "@/lib/site";
 
 export const SOCIAL_IMAGE = {
-  url: "/images/rookhposh-mark.webp",
-  width: 768,
-  height: 512,
-  alt: "نشان رخ پوش",
+  url: "/opengraph-image",
+  width: 1200,
+  height: 630,
+  alt: "رخ پوش | پرو مجازی لباس برای فروشگاه‌ها",
 };
 
 export const PUBLIC_INDEXABLE_ROUTES = [

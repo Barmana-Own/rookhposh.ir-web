@@ -39,3 +39,10 @@ Article `content` is treated as Markdown or plain text. It is rendered on the se
 ## Indexing behavior
 
 The empty Blog index is `noindex` and is not added to the sitemap. When published posts are available, the index becomes indexable and sitemap entries are generated only for posts whose `noindex` value is false. Canonical URLs supplied by the provider are accepted only when they resolve to the configured main site origin.
+
+## Discovery and structured data
+
+- Published, indexable posts are emitted by the request-time `app/sitemap.ts` route; static marketing routes remain present when the CMS is unavailable.
+- `/feed.xml` exposes published, indexable posts with escaped RSS XML, canonical trailing-slash article links, and no draft/private provider fields.
+- Article pages emit a validated `BlogPosting` JSON-LD object that references the server-rendered Rookhposh Organization entity and the visible breadcrumb route. No ratings, reviews, offers, or unsupported claims are synthesized.
+- `/opengraph-image` is a deterministic 1200×630 PNG route used as the default large social card. Its rendered text is intentionally minimal so the existing Next.js image runtime remains reliable with the installed font stack.

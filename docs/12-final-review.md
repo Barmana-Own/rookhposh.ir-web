@@ -186,3 +186,47 @@ The provider sends no secret or authorization header, bounds the request timeout
 The previous R4 live-deployment drift remains an external release blocker: the public host must receive this verified source revision and be rechecked separately. The external `blog.rookhposh.ir` host remains a separate operational dependency and is not used as the public Blog route.
 
 PROMPT_02_STATUS: PASS
+
+## Prompt 03 incremental final review — 2026-09-28
+
+### Release verdict
+
+PASS for the repository-scoped article SEO and discovery update. The Blog now has article-level metadata and structured data, request-time CMS-aware sitemap generation, an escaped RSS feed, a deterministic large social card, and an additional contextual link from the store page. The homepage animation and protected product facts remain unchanged.
+
+### Implementation traceability
+
+| Requirement | Evidence | Result |
+| --- | --- | --- |
+| Article metadata | `app/blog/[slug]/page.tsx`, validated canonical/SEO fallbacks, article OG/Twitter fields, dates, author, robots | PASS |
+| Blog index metadata | `app/blog/page.tsx`, distinct canonical, RSS alternate, empty/indexable robots behavior | PASS |
+| Article structured data | `components/seo/BlogPostingStructuredData.tsx`, `components/seo/JsonLd.tsx` | PASS |
+| Breadcrumb structured data | Existing visible `Breadcrumbs` plus safe shared JSON-LD serialization | PASS |
+| Sitemap resilience | Dynamic `app/sitemap.ts`, static routes retained when provider is unavailable | PASS |
+| RSS/Atom | `app/feed.xml/route.ts`, escaped RSS XML, published/indexable entries only | PASS |
+| Internal discovery | Store page → Blog link, Blog cards/article CTA/footer links | PASS |
+| Organization identity | Old Blog subdomain removed from `sameAs`; no replacement profile invented | PASS |
+| Large social card | `app/opengraph-image.tsx`, deterministic 1200×630 PNG route | PASS |
+
+### Validation evidence
+
+| Check | Status | Evidence |
+| --- | --- | --- |
+| `npm run lint` | PASS | Executed after Prompt 03 changes |
+| `npm run typecheck` | PASS | Executed after Prompt 03 changes |
+| `npm run test:seo` | PASS | Updated JSON-LD/feed/social-card source contract |
+| `npm run test:r2` | PASS | 535-frame regression contract |
+| `npm run test:r3` | PASS | Existing information-architecture contract |
+| `npm run test:blog` | PASS | Blog routes/provider/schema/feed/social-card source checks |
+| `npm run build` | PASS | Includes dynamic `/feed.xml`, dynamic `/sitemap.xml`, and static `/opengraph-image` |
+| Existing SEO/R3/R4 smoke | PASS | Controlled production routes and metadata remain valid |
+| `npm run test:blog:smoke` | PASS | Empty state, RSS content type, sitemap exclusion, 404, and social-card content type |
+| `npm run test:blog:fixture` | PASS | Article metadata, BlogPosting/BreadcrumbList JSON-LD, sanitizer, dynamic sitemap/feed inclusion and draft/noindex exclusion |
+| Live deployment | NOT_PERFORMED | No external deployment or DNS change authorized in this task |
+
+### Security and preservation review
+
+JSON-LD values are serialized with `<`, `>`, `&`, and line-separator escaping before insertion into script elements. CMS Markdown remains sanitized with raw HTML disabled. RSS values are XML-escaped and only validated published/indexable records are emitted. Organization identity contains no unsupported `sameAs` URL. `AnimationRuntime.tsx`, GSAP/ScrollTrigger, canvas, frames, pricing, hero composition, and dashboard URL are unchanged.
+
+The deterministic social-card route initially exposed an unsupported complex-font rendering failure during build; it was reduced to a reliable minimal brand card using supported text while preserving the 1200×630 output requirement. The failure was fixed and the production build passed.
+
+PROMPT_03_STATUS: PASS

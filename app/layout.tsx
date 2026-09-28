@@ -6,6 +6,7 @@ import "@fontsource/vazirmatn/700.css";
 import "@fontsource/vazirmatn/800.css";
 import "./globals.css";
 import StructuredData from "@/components/seo/StructuredData";
+import { SOCIAL_IMAGE } from "@/lib/marketing";
 import {
   SITE_DESCRIPTION,
   SITE_HOMEPAGE_URL,
@@ -36,20 +37,13 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title: "رخ پوش | پرو مجازی لباس برای فروشگاه‌ها",
     description: SITE_DESCRIPTION,
-    images: [
-      {
-        url: "/images/rookhposh-mark.webp",
-        width: 768,
-        height: 512,
-        alt: "نشان رخ پوش",
-      },
-    ],
+    images: [SOCIAL_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
     title: "رخ پوش | پرو مجازی لباس برای فروشگاه‌ها",
     description: SITE_DESCRIPTION,
-    images: ["/images/rookhposh-mark.webp"],
+    images: [SOCIAL_IMAGE.url],
   },
   robots: {
     index: true,

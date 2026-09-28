@@ -4,6 +4,7 @@ import {
   SITE_NAME,
   SITE_ORIGIN,
 } from "@/lib/site";
+import JsonLd from "./JsonLd";
 
 const structuredData = {
   "@context": "https://schema.org",
@@ -25,7 +26,6 @@ const structuredData = {
         contactType: "customer service",
         availableLanguage: ["fa-IR"],
       },
-      sameAs: ["https://blog.rookhposh.ir"],
     },
     {
       "@type": "WebSite",
@@ -50,10 +50,5 @@ const structuredData = {
 };
 
 export default function StructuredData() {
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-    />
-  );
+  return <JsonLd data={structuredData} />;
 }

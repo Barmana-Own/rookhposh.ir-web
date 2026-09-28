@@ -105,7 +105,7 @@ This repository is a public frontend-only landing page with a first-party Blog p
 
 - `https://rookhposh.ir` is the intended canonical public origin because it is the project name and the existing dashboard/blog links use the same brand.
 - Persian is the only published language in this repository; no `hreflang` alternate is emitted.
-- The existing logo asset is the approved brand image for metadata until a dedicated social-card asset is supplied.
+- The generated `/opengraph-image` route is the approved deterministic large-card surface; the existing mark asset remains the Organization logo.
 
 ## 16. Risks
 
@@ -125,3 +125,7 @@ The UI is an existing dark, gold-accented Persian RTL editorial landing page. St
 ## Prompt 02 implementation update
 
 The first-party public Blog presentation now lives at `/blog/` and `/blog/[slug]/`. It uses a server-rendered content-provider boundary under `lib/blog/` and remains safe when `BLOG_CONTENT_API_URL` is absent or unavailable. The external `blog.rookhposh.ir` host is retained only as a separate related integration and is not the primary public article destination. No local CMS, database, editor, authentication, or fabricated article content was added.
+
+## Prompt 03 implementation update
+
+Published article metadata now includes validated canonical, article Open Graph/Twitter fields, publication/update times, and author information. Article pages emit safe `BlogPosting` and visible-matching breadcrumb JSON-LD. Sitemap generation is request-time and retains static marketing routes through CMS failures; `/feed.xml` exposes escaped published indexable entries; `/opengraph-image` provides a deterministic 1200×630 social card. The old Blog subdomain was removed from Organization `sameAs` because it is not an approved social identity signal.

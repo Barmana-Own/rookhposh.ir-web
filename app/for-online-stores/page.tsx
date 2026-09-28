@@ -76,6 +76,9 @@ export default function ForOnlineStoresPage() {
           <Link className="content-page__button fa-copy" href="/pricing">
             مشاهده تعرفه‌ها
           </Link>
+          <Link className="content-page__button fa-copy" href="/blog">
+            مطالعه مقالات
+          </Link>
         </div>
       </section>
     </MarketingPageShell>

@@ -14,8 +14,13 @@ const requiredFiles = [
   "components/blog/BlogDate.tsx",
   "components/blog/BlogImage.tsx",
   "components/blog/BlogProductCta.tsx",
+  "components/seo/BlogPostingStructuredData.tsx",
+  "components/seo/JsonLd.tsx",
   "app/blog/page.tsx",
   "app/blog/[slug]/page.tsx",
+  "app/feed.xml/route.ts",
+  "app/opengraph-image.tsx",
+  "scripts/smoke-blog-fixture.mjs",
   "docs/blog-content-provider.md",
 ];
 
@@ -35,6 +40,11 @@ for (const relativePath of [
   "components/blog/BlogContent.tsx",
   "app/blog/page.tsx",
   "app/blog/[slug]/page.tsx",
+  "components/seo/BlogPostingStructuredData.tsx",
+  "components/seo/JsonLd.tsx",
+  "app/feed.xml/route.ts",
+  "app/opengraph-image.tsx",
+  "scripts/smoke-blog-fixture.mjs",
   "app/sitemap.ts",
   ".env.example",
 ]) {
@@ -52,6 +62,11 @@ const requiredMarkers = new Map([
   ["components/blog/BlogContent.tsx", ["react-markdown", "rehype-sanitize", "skipHtml"]],
   ["app/blog/page.tsx", ["getPublishedPosts", "generateMetadata", "BLOG_DESCRIPTION", "BlogProductCta"]],
   ["app/blog/[slug]/page.tsx", ["notFound()", "getPublishedPostBySlug", "BlogContent", "relatedPosts"]],
+  ["components/seo/BlogPostingStructuredData.tsx", ["BlogPosting", "datePublished", "dateModified", "publisher", "mainEntityOfPage", "fa-IR"]],
+  ["components/seo/JsonLd.tsx", ["serializeJsonLd", "application/ld+json", "\\u003c"]],
+  ["app/feed.xml/route.ts", ["application/rss+xml", "escapeXml", "getPublishedPosts", "guid", "pubDate"]],
+  ["app/opengraph-image.tsx", ["ImageResponse", "width: 1200", "height: 630"]],
+  ["scripts/smoke-blog-fixture.mjs", ["BLOG_CONTENT_API_URL", "BlogPosting", "BreadcrumbList", "draft-post", "noindex-post"]],
   ["app/sitemap.ts", ["getPublishedPosts", "noindex", "blogRoutes", "postRoutes"]],
   [".env.example", ["BLOG_CONTENT_API_URL"]],
 ]);

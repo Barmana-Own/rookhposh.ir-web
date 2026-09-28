@@ -25,20 +25,24 @@ npm run test:r4:smoke
 npm run test:seo:smoke
 npm run test:r3:smoke
 npm run test:blog:smoke
+npm run test:blog:fixture
 npm run lint
 npm run typecheck
 npm run build
 npm run start
 ```
 
-The source tests check metadata/crawl/schema markers, the R2 rendering/frame-loading safeguards, the R3 route/intent registry, and the Blog provider/rendering boundary. The controlled-production R4 smoke test runs against `next start` and verifies rendered metadata, canonical URLs, robots, sitemap, JSON-LD syntax, RTL, internal links, expected route statuses, and a genuine 404 response. The production smoke tests run against the same build and verify the complete R1-R3 contract plus the no-CMS Blog empty state. The production build generates the homepage, four factual public content routes, first-party Blog routes, `/robots.txt`, `/sitemap.xml`, and `/manifest.webmanifest`.
+The source tests check metadata/crawl/schema markers, the R2 rendering/frame-loading safeguards, the R3 route/intent registry, and the Blog provider/rendering boundary. The controlled-production R4 smoke test runs against `next start` and verifies rendered metadata, canonical URLs, robots, sitemap, JSON-LD syntax, RTL, internal links, expected route statuses, and a genuine 404 response. The production smoke tests run against the same build and verify the complete R1-R3 contract plus the no-CMS Blog empty state, RSS feed, and generated social-card route. `npm run test:blog:fixture` starts an isolated local CMS fixture and production server to verify article metadata, BlogPosting/BreadcrumbList JSON-LD, sitemap/feed inclusion and exclusion, and sanitized content. The production build generates the homepage, four factual public content routes, first-party Blog routes, `/feed.xml`, `/opengraph-image`, `/robots.txt`, `/sitemap.xml`, and `/manifest.webmanifest`.
 
 ## SEO surfaces
 
 - Canonical, Persian Open Graph/Twitter, robots, and viewport metadata: `app/layout.tsx`
 - JSON-LD organization, website, and service graph: `components/seo/StructuredData.tsx`
+- Safe JSON-LD serialization and article BlogPosting schema: `components/seo/JsonLd.tsx`, `components/seo/BlogPostingStructuredData.tsx`
 - Crawl policy: `app/robots.ts`
 - Canonical sitemap: `app/sitemap.ts`
+- Published article RSS feed: `app/feed.xml/route.ts`
+- Deterministic 1200×630 social card: `app/opengraph-image.tsx`
 - Persian RTL manifest: `app/manifest.ts`
 - Reusable Codex Luna Max handoff prompts: `docs/rookhposh-seo-fix-prompts.md`
 - R1 technical SEO evidence: `docs/r1-technical-seo-foundation.md`
@@ -62,6 +66,7 @@ The source tests check metadata/crawl/schema markers, the R2 rendering/frame-loa
 - `/faq/` — factual product questions and answers.
 - `/blog/` — first-party server-rendered published-article index, with a truthful empty state when no provider is configured.
 - `/blog/[slug]/` — first-party server-rendered published article route with real 404 behavior for unavailable content.
+- `/feed.xml` — escaped RSS feed for published, indexable articles.
 
 Terms of Use, Privacy Policy, and a separate direct-to-consumer `/virtual-try-on/` page remain unpublished pending owner-approved content and positioning decisions.
 

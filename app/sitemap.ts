@@ -2,6 +2,8 @@ import type { MetadataRoute } from "next";
 import { getPublishedPosts } from "@/lib/blog/repository";
 import { PUBLIC_INDEXABLE_ROUTES, publicUrl } from "@/lib/marketing";
 
+export const dynamic = "force-dynamic";
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const routes = PUBLIC_INDEXABLE_ROUTES.map((route) => ({
     url: publicUrl(route.path),

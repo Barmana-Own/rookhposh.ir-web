@@ -1,6 +1,6 @@
 {
   "project": "Rookhposh",
-  "release": "seo-source-fix-prompt-02-blog-foundation-2026-09-28",
+  "release": "seo-source-fix-prompt-03-article-seo-2026-09-28",
   "status": "SOURCE_COMPLETE_EXTERNAL_DEPLOYMENT_NOT_PERFORMED",
   "finalStageStatus": "PASS",
   "dates": {
@@ -34,10 +34,15 @@
     "app/faq/page.tsx",
     "app/blog/page.tsx",
     "app/blog/[slug]/page.tsx",
+    "app/feed.xml/route.ts",
+    "app/opengraph-image.tsx",
     "components/blog/",
+    "components/seo/JsonLd.tsx",
+    "components/seo/BlogPostingStructuredData.tsx",
     "lib/blog/",
     "scripts/validate-blog.mjs",
     "scripts/smoke-blog.mjs",
+    "scripts/smoke-blog-fixture.mjs",
     "docs/blog-content-provider.md",
     "public/images/rookhposh-mark.webp"
   ],
@@ -58,6 +63,7 @@
     "typecheck": "npm run typecheck",
     "build": "npm run build",
     "blogSmoke": "npm run test:blog:smoke",
+    "blogFixtureSmoke": "npm run test:blog:fixture",
     "start": "npm run start",
     "databaseMigration": null,
     "productionStart": "npm run start"
@@ -85,6 +91,11 @@
     "blogEmptyStateSmoke": "PASS; no CMS URL returns 200 empty state, noindex, no sitemap entry, and missing-slug 404",
     "blogCmsFixtureSmoke": "PASS; published article rendered, draft excluded, and script content not emitted",
     "blogProviderCompatibility": "PASS; react-markdown 10.1.0 and rehype-sanitize 6.0.0 installed with lockfile",
+    "blogArticleFixture": "PASS; article metadata, BlogPosting/BreadcrumbList JSON-LD, sitemap/feed inclusion and draft/noindex exclusion",
+    "rssFeed": "PASS; escaped RSS with canonical public links and published/indexable posts only",
+    "dynamicSitemap": "PASS; CMS-backed sitemap is request-time and retains static routes when the provider is unavailable",
+    "socialCard": "PASS; deterministic /opengraph-image returns a 1200x630 PNG",
+    "organizationSameAsCleanup": "PASS; old blog subdomain is not emitted as Organization sameAs",
     "r4LiveProductionVerification": "FAIL; public host is serving an older deployment without R1-R3 surfaces",
     "liveHttpsRedirect": "PASS",
     "liveRobotsAndSitemap": "FAIL; both rendered the live 404 page",
@@ -103,13 +114,13 @@
     "responseHeadersConfigured": true
   },
   "knownNonBlockingIssues": [
-    "The optimized brand asset is not a dedicated 1200x630 social card.",
+    "The generated social card is a restrained 1200x630 brand card; dedicated approved Persian social artwork is optional.",
     "External dashboard, blog, and trust-seal behavior is outside this repository.",
     "The existing 535-frame visual experience remains asset-heavy by design; R2 controls scheduling but does not reduce the 10.89 MiB sequence.",
     "Approved Terms of Use and Privacy Policy copy/routes require owner input; footer labels remain non-interactive until supplied.",
     "Homepage B2B-first intent, direct-to-consumer availability, and the /for-online-stores slug require owner confirmation.",
     "The public route set intentionally remains small; additional routes require distinct factual content.",
-    "The live host must be updated to the verified R1-R3 build before production SEO can pass.",
+    "The live host must be updated to the verified R1-R3 and Prompt 03 build before production SEO can pass.",
     "The blog host failed DNS resolution during the live browser check."
   ],
   "artifacts": [
@@ -135,7 +146,12 @@
     "components/blog/",
     "app/blog/",
     "scripts/validate-blog.mjs",
-    "scripts/smoke-blog.mjs"
+    "scripts/smoke-blog.mjs",
+    "scripts/smoke-blog-fixture.mjs",
+    "app/feed.xml/route.ts",
+    "app/opengraph-image.tsx",
+    "components/seo/JsonLd.tsx",
+    "components/seo/BlogPostingStructuredData.tsx"
   ],
-  "externalDeployment": "NOT_PERFORMED; Prompt 02 source validation is complete, but the live host was not updated in this task"
+  "externalDeployment": "NOT_PERFORMED; Prompt 03 source validation is complete, but the live host was not updated in this task"
 }

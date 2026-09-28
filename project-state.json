@@ -4,7 +4,7 @@
     "origin": "https://rookhposh.ir",
     "language": "fa-IR",
     "framework": "Next.js 16 App Router",
-    "release": "seo-source-fix-prompt-02-blog-foundation-2026-09-28"
+    "release": "seo-source-fix-prompt-03-article-seo-2026-09-28"
   },
   "activeStage": "12-fullstack-final-review",
   "workflowStatus": "complete",
@@ -96,6 +96,11 @@
     "scripts/smoke-r4.mjs",
     "scripts/validate-blog.mjs",
     "scripts/smoke-blog.mjs",
+    "scripts/smoke-blog-fixture.mjs",
+    "app/feed.xml/route.ts",
+    "app/opengraph-image.tsx",
+    "components/seo/JsonLd.tsx",
+    "components/seo/BlogPostingStructuredData.tsx",
     "public/images/rookhposh-mark.webp"
   ],
   "architectureDecisions": [
@@ -112,12 +117,15 @@
     "Use one shared metadata helper, visible breadcrumbs with matching BreadcrumbList JSON-LD, and a route registry as the sitemap source of truth.",
     "Do not add FAQPage JSON-LD because current Google search appearance guidance does not make regular FAQ rich results a reasonable expectation for this commercial site.",
     "Use a server-rendered Blog presentation with an explicit external public-content provider boundary; do not add a local CMS, database, editor, or authentication layer.",
-    "Render only validated published Blog records, keep empty/no-CMS content noindex and out of the sitemap, and sanitize Markdown with raw HTML disabled."
+    "Render only validated published Blog records, keep empty/no-CMS content noindex and out of the sitemap, and sanitize Markdown with raw HTML disabled.",
+    "Use request-time sitemap generation so CMS outages preserve static marketing URLs and newly published indexable articles can be discovered without a rebuild.",
+    "Use one safe JSON-LD serializer for repository-controlled and validated article/breadcrumb data; remove the unverified Blog subdomain from Organization sameAs.",
+    "Use a deterministic 1200x630 Open Graph image route with minimal supported text after validating the installed image renderer."
   ],
   "assumptions": [
     "https://rookhposh.ir is the canonical public origin.",
     "Persian is the only published language in this repository.",
-    "The existing logo asset is the approved brand image until a dedicated social-card asset is supplied.",
+    "The existing logo asset remains the Organization logo; the social-card surface uses the deterministic /opengraph-image route until dedicated approved artwork is supplied.",
     "The initial browser asset inventory is a tool observation, not a protocol-level request trace.",
     "The connected browser surface cannot force reduced-motion emulation or provide Lighthouse/field data.",
     "The connected browser surface cannot force mobile viewport emulation; those checks remain environment-limited."
@@ -132,10 +140,11 @@
     "Homepage intent remains owner-confirmation pending; the implementation does not silently rewrite the current H1 or positioning.",
     "Approved legal copy and routes remain unavailable, so Terms and Privacy pages are intentionally unpublished.",
     "The final public route set is intentionally small; additional routes require distinct factual content and owner-approved intent.",
-    "Blog authoring and content availability remain external through optional BLOG_CONTENT_API_URL; the first-party public routes belong to this application."
+    "Blog authoring and content availability remain external through optional BLOG_CONTENT_API_URL; the first-party public routes belong to this application.",
+    "RSS exposes published indexable articles only; noindex content remains public-page controlled but is excluded from sitemap/feed discovery."
   ],
   "unresolvedBlockers": [
-    "Live https://rookhposh.ir is serving an older deployment without the R1-R3 metadata, crawl routes, JSON-LD, or four public content routes.",
+    "Live https://rookhposh.ir is serving an older deployment without the R1-R3 and Prompt 03 metadata, crawl routes, JSON-LD, Blog, feed, or four public content routes.",
     "The live blog host failed DNS resolution during browser verification.",
     "A protocol-level live HTTP response trace, mobile viewport emulation, and reduced-motion emulation were unavailable in the connected environment."
   ],
@@ -170,7 +179,10 @@
     "npm run test:blog": "PASS",
     "npm run test:blog:smoke": "PASS; no-CMS empty state, sitemap exclusion, and missing-slug 404",
     "CMS fixture integration smoke": "PASS; published content rendered, draft excluded, and script payload not emitted",
-    "Prompt 02 source build": "PASS; dynamic /blog and /blog/[slug] routes generated"
+    "Prompt 02 source build": "PASS; dynamic /blog and /blog/[slug] routes generated",
+    "npm run test:blog:fixture": "PASS; elevated rerun after normal sandbox spawn EPERM; article metadata, JSON-LD, sanitizer, dynamic sitemap/feed inclusion and draft/noindex exclusion",
+    "Prompt 03 build": "PASS; dynamic feed/sitemap and static 1200x630 Open Graph image route generated",
+    "Prompt 03 social-card renderer failure": "REPAIRED; complex Persian glyph rendering was reduced to reliable supported brand-card text after build evidence"
   },
   "r1": {
     "status": "PASS_WITH_DOCUMENTED_OWNER_INPUT",
@@ -341,6 +353,36 @@
       "existing SEO/R3/R4 smoke": "PASS",
       "npm run test:blog:smoke": "PASS",
       "CMS fixture smoke": "PASS",
+      "external deployment": "NOT_PERFORMED"
+    },
+    "artifact": "docs/blog-content-provider.md"
+  },
+  "prompt03": {
+    "status": "PASS",
+    "phase": "Article SEO, Structured Data, Sitemap, RSS, and Internal Discovery",
+    "date": {
+      "gregorian": "2026-09-28",
+      "jalali": "۱۴۰۵-۰۷-۰۶"
+    },
+    "metadata": "PASS; article SEO fallbacks, validated canonical, article OG/Twitter fields, dates, author, robots, and Blog index RSS alternate",
+    "structuredData": "PASS; safe BlogPosting, publisher Organization reference, mainEntityOfPage, inLanguage, and visible-matching BreadcrumbList",
+    "sitemap": "PASS; request-time CMS-aware route retains static marketing routes and excludes drafts/noindex posts",
+    "feed": "PASS; escaped RSS feed with canonical links and published/indexable entries only",
+    "internalDiscovery": "PASS; store page, Blog cards, article CTA, and footer routes",
+    "organizationCleanup": "PASS; unverified Blog subdomain removed from sameAs",
+    "socialCard": "PASS; deterministic /opengraph-image route at 1200x630 PNG",
+    "preservation": "PASS; homepage animation, GSAP/ScrollTrigger, canvas, frames, pricing, hero, and dashboard URL unchanged",
+    "validation": {
+      "npm run lint": "PASS",
+      "npm run typecheck": "PASS",
+      "npm run test:seo": "PASS",
+      "npm run test:r2": "PASS",
+      "npm run test:r3": "PASS",
+      "npm run test:blog": "PASS",
+      "npm run build": "PASS",
+      "existing SEO/R3/R4 smoke": "PASS",
+      "npm run test:blog:smoke": "PASS",
+      "npm run test:blog:fixture": "PASS",
       "external deployment": "NOT_PERFORMED"
     },
     "artifact": "docs/blog-content-provider.md"

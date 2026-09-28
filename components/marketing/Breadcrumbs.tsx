@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { publicUrl } from "@/lib/marketing";
+import JsonLd from "@/components/seo/JsonLd";
 
 export default function Breadcrumbs({
   name,
@@ -34,10 +35,7 @@ export default function Breadcrumbs({
         <span aria-hidden="true">/</span>
         <span aria-current="page">{name}</span>
       </nav>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
+      <JsonLd data={structuredData} />
     </>
   );
 }
