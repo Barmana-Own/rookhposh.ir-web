@@ -13,6 +13,7 @@ export type BlogPost = {
   title: string;
   excerpt: string;
   content: string;
+  contentFormat: "markdown" | "plain-text" | "tiptap-json";
   featuredImage: BlogImage | null;
   category: string | null;
   tags: string[];

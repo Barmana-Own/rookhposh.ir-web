@@ -1,11 +1,11 @@
 {
   "project": "Rookhposh",
-  "release": "seo-source-fix-prompt-03-article-seo-2026-09-28",
-  "status": "SOURCE_COMPLETE_EXTERNAL_DEPLOYMENT_NOT_PERFORMED",
-  "finalStageStatus": "PASS",
+  "release": "seo-source-fix-prompt-11-seo-content-cluster-2026-09-30",
+  "status": "SOURCE_QA_AND_CONTENT_PLAN_COMPLETE_WITH_EXTERNAL_DEPENDENCIES_PENDING",
+  "finalStageStatus": "PROMPT_11_CONTENT_PLAN_COMPLETE_NO_PUBLICATION",
   "dates": {
-    "gregorian": "2026-09-28",
-    "jalali": "۱۴۰۵-۰۷-۰۶"
+    "gregorian": "2026-09-29",
+    "jalali": "۱۴۰۵-۰۷-۰۷"
   },
   "repositoryType": "Next.js 16 App Router frontend-only application",
   "language": "fa-IR",
@@ -43,8 +43,18 @@
     "scripts/validate-blog.mjs",
     "scripts/smoke-blog.mjs",
     "scripts/smoke-blog-fixture.mjs",
+    "app/api/revalidate/blog/route.ts",
+    "lib/blog/revalidation.ts",
+    "lib/blog/rich-document.ts",
+    "scripts/smoke-revalidation.mjs",
     "docs/blog-content-provider.md",
-    "public/images/rookhposh-mark.webp"
+    "docs/r7-animation-cache-before-after.md",
+    "scripts/smoke-r7-animation-cache.mjs",
+    "public/images/rookhposh-mark.webp",
+    "public/frames/v1/",
+    "docs/search-console-setup.md",
+    "scripts/validate-search-console.mjs",
+    "scripts/smoke-search-console.mjs"
   ],
   "runtime": {
     "node": "22.15.0",
@@ -64,6 +74,10 @@
     "build": "npm run build",
     "blogSmoke": "npm run test:blog:smoke",
     "blogFixtureSmoke": "npm run test:blog:fixture",
+    "revalidationSmoke": "npm run test:revalidation",
+    "animationCacheSmoke": "npm run test:r7:smoke",
+    "searchConsoleSourceTest": "npm run test:search-console",
+    "searchConsoleSmoke": "npm run test:search-console:smoke",
     "start": "npm run start",
     "databaseMigration": null,
     "productionStart": "npm run start"
@@ -94,6 +108,9 @@
     "blogArticleFixture": "PASS; article metadata, BlogPosting/BreadcrumbList JSON-LD, sitemap/feed inclusion and draft/noindex exclusion",
     "rssFeed": "PASS; escaped RSS with canonical public links and published/indexable posts only",
     "dynamicSitemap": "PASS; CMS-backed sitemap is request-time and retains static routes when the provider is unavailable",
+    "cmsPublishedContentIntegration": "PASS; fixture verifies published, draft, unpublish, republish, sitemap, and feed state",
+    "revalidationAuthorization": "PASS; invalid signature 401 and valid signature 200",
+    "cmsDependencyAudit": "NOT_APPLICABLE; audited in separate rookhposh-cms repository",
     "socialCard": "PASS; deterministic /opengraph-image returns a 1200x630 PNG",
     "organizationSameAsCleanup": "PASS; old blog subdomain is not emitted as Organization sameAs",
     "r4LiveProductionVerification": "FAIL; public host is serving an older deployment without R1-R3 surfaces",
@@ -106,7 +123,32 @@
     "liveMobileAndReducedMotion": "NOT_RUN; connected browser lacks emulation",
     "externalBlogAndLegalRoutes": "FAIL/PENDING; blog DNS unavailable and legal routes remain owner input",
     "liveSearchConsole": "NOT_RUN",
-    "externalDeployment": "NOT_PERFORMED"
+    "externalDeployment": "NOT_PERFORMED",
+    "r7FrameInventory": "PASS; 535 files and 11,423,938 bytes before and after",
+    "r7FrameIntegrity": "PASS; before/after LF-normalized sequence signature 739bb260101d54d3d86d6077388363de9f6a52b9e71bfea9e1265c70c0200d86",
+    "r7CacheHeaderSmoke": "PASS; versioned representative frames returned 200 with public, max-age=31536000, immutable; legacy path returned 404",
+    "r7SourceValidation": "PASS; test:r2, test:seo, test:r3, test:r6, test:blog, typecheck, and lint",
+    "r7Build": "PASS; elevated rerun required after sandbox spawn EPERM",
+    "r6SmokeOutsidePrompt08": "FAIL_NOT_IN_SCOPE; pre-existing homepage H1 assertion mismatch",
+    "searchConsoleSourceValidation": "PASS; optional metadata path, safe env template, sitemap boundaries, and setup documentation",
+    "searchConsoleNoTokenBuild": "PASS",
+    "searchConsoleConfiguredTokenBuild": "PASS; local test token only",
+    "searchConsoleOmissionSmoke": "PASS; verification meta tag omitted without configuration",
+    "searchConsoleInvalidTokenSmoke": "PASS; malformed local test value also omitted verification metadata",
+    "searchConsoleEmissionSmoke": "PASS; exactly one configured verification meta tag emitted with local test configuration",
+    "searchConsoleSitemapRobotsSmoke": "PASS; canonical sitemap/robots and private-host exclusions",
+    "searchConsoleExternalVerification": "NOT_RUN; owner-controlled Search Console access was not supplied",
+    "r8PublicCleanInstall": "PASS; npm ci completed from lockfile",
+    "r8PublicValidation": "PASS; lint, typecheck, SEO/R2/R3/R6/Blog/Search Console tests, fixture tests, build, HTTP smoke, and dependency audit",
+    "r8CmsValidation": "PASS; npm ci, lint, typecheck, 9 tests, Prisma validation, build, standalone auth/robots/API smoke, and dependency audit",
+    "r8PublicHttpRoutes": "PASS; public marketing routes, Blog, robots, sitemap, feed, manifest; unknown Blog slug 404",
+    "r8AnimationIntegrity": "PASS; 535 content-identical frames and immutable versioned cache smoke",
+    "r8DesktopVisualAndConsole": "PASS; controlled desktop visual inspection and no console warning/error entries",
+    "r8MobileTabletAndReducedMotion": "NOT_RUN; no preserved baseline or browser viewport/emulation control",
+    "r8CmsMigrationApply": "NOT_RUN; no authorized MySQL instance and no mutation against an unspecified target",
+    "r8ExternalLinks": "PASS_WITH_EXTERNAL_DEPENDENCIES; dashboard 200, trust-seal provider 500, legacy Blog DNS failure",
+    "r8Report": "PASS_WITH_DOCUMENTED_LIMITATIONS; docs/r8-final-blog-cms-seo-release-report.md",
+    "prompt11Research": "PASS_RESEARCH_ONLY; eight briefs, qualitative SERP observation, no article publication, no product code changes"
   },
   "security": {
     "criticalOrHighUnresolved": false,
@@ -121,7 +163,13 @@
     "Homepage B2B-first intent, direct-to-consumer availability, and the /for-online-stores slug require owner confirmation.",
     "The public route set intentionally remains small; additional routes require distinct factual content.",
     "The live host must be updated to the verified R1-R3 and Prompt 03 build before production SEO can pass.",
-    "The blog host failed DNS resolution during the live browser check."
+    "The blog host failed DNS resolution during the live browser check.",
+    "Live CMS/MySQL integration and cross-application deployment were not performed; matching server-only revalidation secrets are required.",
+    "The versioned frame directory must be included in deployment artifacts; future frame changes require a new versioned path.",
+    "Before/after screenshot comparison, mobile/tablet viewport comparison, and reduced-motion browser emulation were not run because the required baseline/control was unavailable.",
+    "Search Console ownership verification, keyword-tool metrics, and all real performance/indexing/query metrics remain owner-controlled external checks; no values are fabricated.",
+    "The first-party Blog has no configured published article inventory in this source environment; content planning is delivered but no article is published.",
+    "Prompt 11 content briefs remain conditional on owner verification of B2B/B2C positioning, AI terminology, fit/size capability, integrations, pricing semantics, and privacy/legal content."
   ],
   "artifacts": [
     "README.md",
@@ -148,10 +196,24 @@
     "scripts/validate-blog.mjs",
     "scripts/smoke-blog.mjs",
     "scripts/smoke-blog-fixture.mjs",
+    "app/api/revalidate/blog/route.ts",
+    "lib/blog/revalidation.ts",
+    "lib/blog/rich-document.ts",
+    "scripts/smoke-revalidation.mjs",
     "app/feed.xml/route.ts",
     "app/opengraph-image.tsx",
     "components/seo/JsonLd.tsx",
-    "components/seo/BlogPostingStructuredData.tsx"
+    "components/seo/BlogPostingStructuredData.tsx",
+    "docs/r7-animation-cache-before-after.md",
+    "scripts/smoke-r7-animation-cache.mjs",
+    "public/frames/v1/",
+    "docs/search-console-setup.md",
+    "scripts/validate-search-console.mjs",
+    "scripts/smoke-search-console.mjs",
+    "scripts/smoke-r8-release.mjs",
+    "docs/r8-final-blog-cms-seo-release-report.md",
+    "docs/seo-content-cluster-01.md"
   ],
-  "externalDeployment": "NOT_PERFORMED; Prompt 03 source validation is complete, but the live host was not updated in this task"
+  "externalDeployment": "NOT_PERFORMED; public/CMS live deployment, MySQL-backed migration/integration, external service rechecks, and owner-controlled Search Console verification remain pending",
+  "contentPublication": "NOT_PERFORMED; Prompt 11 is research and planning only"
 }

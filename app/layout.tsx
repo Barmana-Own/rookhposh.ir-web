@@ -13,12 +13,15 @@ import {
   SITE_NAME,
   SITE_ORIGIN,
   SITE_URL,
+  getGoogleSiteVerification,
 } from "@/lib/site";
+
+const googleSiteVerification = getGoogleSiteVerification();
 
 export const metadata: Metadata = {
   metadataBase: SITE_URL,
   title: {
-    default: "رخ پوش | پرو مجازی لباس برای فروشگاه‌ها",
+    default: "رخ پوش | اتاق پرو دیجیتال لباس",
     template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
@@ -35,13 +38,13 @@ export const metadata: Metadata = {
     locale: "fa_IR",
     url: SITE_HOMEPAGE_URL,
     siteName: SITE_NAME,
-    title: "رخ پوش | پرو مجازی لباس برای فروشگاه‌ها",
+    title: "رخ پوش | اتاق پرو دیجیتال لباس",
     description: SITE_DESCRIPTION,
     images: [SOCIAL_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
-    title: "رخ پوش | پرو مجازی لباس برای فروشگاه‌ها",
+    title: "رخ پوش | اتاق پرو دیجیتال لباس",
     description: SITE_DESCRIPTION,
     images: [SOCIAL_IMAGE.url],
   },
@@ -56,6 +59,9 @@ export const metadata: Metadata = {
       "max-video-preview": -1,
     },
   },
+  verification: googleSiteVerification
+    ? { google: googleSiteVerification }
+    : undefined,
 };
 
 export const viewport: Viewport = {

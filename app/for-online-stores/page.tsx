@@ -4,9 +4,9 @@ import MarketingPageShell from "@/components/marketing/MarketingPageShell";
 import { createPageMetadata } from "@/lib/marketing";
 
 export const metadata: Metadata = createPageMetadata({
-  title: "پرو مجازی لباس برای فروشگاه‌ها",
+  title: "راهکار اتاق پرو مجازی برای فروشگاه‌های آنلاین",
   description:
-    "رخ پوش برای فروشگاه‌ها امکان دیدن پیش‌نمایش لباس روی تصویر مشتری را پیش از خرید فراهم می‌کند.",
+    "برای فروشگاه‌های آنلاین لباس، نتیجه انتخاب را روی تصویر مشتری پیش از خرید بررسی کنید.",
   path: "/for-online-stores",
 });
 
@@ -16,12 +16,12 @@ const storeBenefits = [
     description: "تجربه با یک تصویر واضح، تمام‌قد و رو به دوربین شروع می‌شود.",
   },
   {
-    title: "انتخاب مدل و رنگ",
-    description: "گزینه‌های لباس را انتخاب کنید و مدل، رنگ و اندازه را کنار هم ببینید.",
+    title: "انتخاب گزینه‌های لباس",
+    description: "گزینه‌های لباس را انتخاب کنید و مدل و رنگ را کنار هم ببینید.",
   },
   {
-    title: "پیش‌نمایش پیش از خرید",
-    description: "نتیجه انتخاب روی تصویر مشتری پیش از پرداخت قابل مشاهده و مقایسه است.",
+    title: "دیدن پیش‌نمایش انتخاب",
+    description: "نتیجه انتخاب روی تصویر مشتری پیش از پرداخت برای بررسی دیده می‌شود.",
   },
 ] as const;
 
@@ -31,18 +31,17 @@ export default function ForOnlineStoresPage() {
       breadcrumb="برای فروشگاه‌ها"
       path="/for-online-stores"
       eyebrow="برای فروشگاه‌ها"
-      title="پرو مجازی لباس برای فروشگاه‌ها"
-      description="رخ پوش پلی میان انتخاب آنلاین و اطمینان واقعی است؛ تصویری روشن‌تر از نتیجه لباس، پیش از خرید."
+      title="راهکار پرو مجازی برای فروشگاه‌های آنلاین"
+      description="دیدن گزینه‌های لباس روی تصویر مشتری، مسیر انتخاب آنلاین را برای فروشگاه‌ها روشن‌تر می‌کند."
     >
       <section className="content-page__section" aria-labelledby="store-value-title">
         <p className="eyebrow eyebrow--center fa-copy">کاربرد محصول</p>
         <h2 id="store-value-title" className="content-page__section-title fa-copy">
-          یک مسیر روشن برای انتخاب لباس
+          پیش‌نمایش لباس در مسیر خرید آنلاین
         </h2>
         <p className="content-page__section-lead fa-copy">
-          رخ پوش تجربه پرو مجازی لباس را برای فروشگاه‌ها توضیح می‌دهد: تصویر
-          مشتری، لباس انتخابی و پیش‌نمایش نتیجه در یک مسیر قابل فهم کنار هم قرار
-          می‌گیرند.
+          رخ پوش برای فروشگاه‌ها تصویر مشتری، گزینه لباس و پیش‌نمایش نتیجه را در
+          یک مسیر ساده کنار هم قرار می‌دهد.
         </p>
 
         <div className="content-page__cards">
@@ -64,21 +63,22 @@ export default function ForOnlineStoresPage() {
           </h2>
           <p className="content-page__section-copy fa-copy">
             یک تصویر واضح، تمام‌قد و رو به دوربین برای شروع تجربه مناسب است. پس
-            از آن می‌توان مدل، رنگ و اندازه لباس را انتخاب و نتیجه را پیش از خرید
-            دید.
+            از آن می‌توان گزینه‌های لباس را انتخاب و نتیجه را پیش از خرید دید.
           </p>
         </div>
         <div className="content-page__callout content-page__callout--compact">
           <p className="eyebrow fa-copy">انتخاب پلن</p>
           <h3 className="content-page__callout-title fa-copy">
-            پلنی متناسب با ریتم فروشگاه انتخاب کنید
+            تعرفه‌ها را برای برنامه فروشگاه بررسی کنید
           </h3>
-          <Link className="content-page__button fa-copy" href="/pricing">
-            مشاهده تعرفه‌ها
-          </Link>
-          <Link className="content-page__button fa-copy" href="/blog">
-            مطالعه مقالات
-          </Link>
+          <div className="content-page__callout-actions">
+            <Link className="content-page__button fa-copy" href="/pricing">
+              مشاهده تعرفه‌های رخ پوش
+            </Link>
+            <Link className="content-page__button fa-copy" href="/blog">
+              مطالعه مقالات
+            </Link>
+          </div>
         </div>
       </section>
     </MarketingPageShell>

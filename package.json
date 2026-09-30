@@ -9,14 +9,21 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test:seo": "node scripts/validate-seo.mjs",
+    "test:search-console": "node scripts/validate-search-console.mjs",
     "test:r2": "node scripts/validate-r2.mjs",
     "test:r3": "node scripts/validate-r3.mjs",
+    "test:r6": "node scripts/validate-r6.mjs",
     "test:blog": "node scripts/validate-blog.mjs",
     "test:seo:smoke": "node scripts/smoke-seo.mjs",
+    "test:search-console:smoke": "node scripts/smoke-search-console.mjs",
     "test:r3:smoke": "node scripts/smoke-r3.mjs",
+    "test:r6:smoke": "node scripts/smoke-r6.mjs",
+    "test:r7:smoke": "node scripts/smoke-r7-animation-cache.mjs",
+    "test:r8:smoke": "node scripts/smoke-r8-release.mjs",
     "test:r4:smoke": "node scripts/smoke-r4.mjs",
     "test:blog:smoke": "node scripts/smoke-blog.mjs",
-    "test:blog:fixture": "node scripts/smoke-blog-fixture.mjs"
+    "test:blog:fixture": "node scripts/smoke-blog-fixture.mjs",
+    "test:revalidation": "node scripts/smoke-revalidation.mjs"
   },
   "dependencies": {
     "@fontsource/vazirmatn": "^5.3.0",

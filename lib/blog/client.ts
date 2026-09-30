@@ -1,8 +1,11 @@
 const BLOG_REQUEST_TIMEOUT_MS = 4_000;
 const MAX_BLOG_RESPONSE_BYTES = 5_000_000;
+const BLOG_PAGE_LIMIT = 100;
+const MAX_BLOG_PAGES = 100;
+const MAX_BLOG_POSTS = BLOG_PAGE_LIMIT * MAX_BLOG_PAGES;
 const BLOG_POSTS_PATH = "posts";
 
-function getConfiguredBaseUrl() {
+export function getBlogContentBaseUrl() {
   const rawValue = process.env.BLOG_CONTENT_API_URL?.trim();
 
   if (!rawValue) {
@@ -12,7 +15,8 @@ function getConfiguredBaseUrl() {
   try {
     const url = new URL(rawValue);
 
-    if (url.protocol !== "https:" && url.protocol !== "http:") {
+    const localHttp = url.protocol === "http:" && ["localhost", "127.0.0.1", "::1"].includes(url.hostname);
+    if ((url.protocol !== "https:" && !localHttp) || url.username || url.password) {
       return null;
     }
 
@@ -26,8 +30,8 @@ function getConfiguredBaseUrl() {
   }
 }
 
-function buildResourceUrl(slug?: string) {
-  const baseUrl = getConfiguredBaseUrl();
+function buildResourceUrl(slug?: string, page = 1) {
+  const baseUrl = getBlogContentBaseUrl();
 
   if (!baseUrl) {
     return null;
@@ -41,7 +45,8 @@ function buildResourceUrl(slug?: string) {
   url.searchParams.set("status", "published");
 
   if (!slug) {
-    url.searchParams.set("limit", "100");
+    url.searchParams.set("limit", String(BLOG_PAGE_LIMIT));
+    url.searchParams.set("page", String(page));
   }
 
   return url;
@@ -81,8 +86,43 @@ async function requestBlogPayload(url: URL) {
 }
 
 export async function fetchBlogPostsPayload() {
-  const url = buildResourceUrl();
-  return url ? requestBlogPayload(url) : null;
+  const firstUrl = buildResourceUrl();
+  if (!firstUrl) {
+    return null;
+  }
+
+  const firstPayload = await requestBlogPayload(firstUrl);
+  if (!firstPayload || Array.isArray(firstPayload) || typeof firstPayload !== "object" || !Array.isArray((firstPayload as { posts?: unknown }).posts)) {
+    return firstPayload;
+  }
+
+  const pagination = (firstPayload as { pagination?: { hasMore?: unknown } }).pagination;
+  if (!pagination || typeof pagination.hasMore !== "boolean") {
+    return firstPayload;
+  }
+
+  const posts = [...(firstPayload as { posts: unknown[] }).posts];
+  let hasMore = pagination.hasMore;
+  for (let page = 2; hasMore && page <= MAX_BLOG_PAGES; page += 1) {
+    const url = buildResourceUrl(undefined, page);
+    const payload = url ? await requestBlogPayload(url) : null;
+    if (!payload || typeof payload !== "object" || Array.isArray(payload) || !Array.isArray((payload as { posts?: unknown }).posts)) {
+      return null;
+    }
+
+    const pagePagination = (payload as { pagination?: { hasMore?: unknown } }).pagination;
+    if (!pagePagination || typeof pagePagination.hasMore !== "boolean") {
+      return null;
+    }
+
+    posts.push(...(payload as { posts: unknown[] }).posts);
+    if (posts.length > MAX_BLOG_POSTS) {
+      return null;
+    }
+    hasMore = pagePagination.hasMore;
+  }
+
+  return hasMore ? null : { posts };
 }
 
 export async function fetchBlogPostPayload(slug: string) {

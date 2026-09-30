@@ -1,4 +1,5 @@
 import { createServer } from "node:http";
+import { createHmac, randomUUID } from "node:crypto";
 import { join } from "node:path";
 import { spawn } from "node:child_process";
 import { setTimeout as delay } from "node:timers/promises";
@@ -9,6 +10,8 @@ const appPort = 3110;
 const appOrigin = `http://127.0.0.1:${appPort}`;
 const cmsOrigin = `http://127.0.0.1:${cmsPort}`;
 const failures = [];
+const revalidationSecret = "prompt07-integration-secret-with-at-least-32-bytes";
+let cmsPublished = true;
 
 const publishedPost = {
   id: "fixture-safe-post",
@@ -52,7 +55,10 @@ const draftPost = {
 };
 
 function sendJson(response, status, body) {
-  response.writeHead(status, { "Content-Type": "application/json" });
+  response.writeHead(status, {
+    "Cache-Control": "private, no-store",
+    "Content-Type": "application/json",
+  });
   response.end(JSON.stringify(body));
 }
 
@@ -60,11 +66,19 @@ const cms = createServer((request, response) => {
   const url = new URL(request.url ?? "/", cmsOrigin);
 
   if (url.pathname === "/posts") {
-    sendJson(response, 200, { posts: [publishedPost, noindexPost, draftPost] });
+    const page = Number(url.searchParams.get("page") ?? "1");
+    const posts = page === 1
+      ? cmsPublished ? [publishedPost, noindexPost, draftPost] : [noindexPost, draftPost]
+      : [];
+    sendJson(response, 200, { posts, pagination: { page, limit: 100, hasMore: false } });
     return;
   }
 
   if (url.pathname === "/posts/safe-post") {
+    if (!cmsPublished) {
+      sendJson(response, 404, { error: "not found" });
+      return;
+    }
     sendJson(response, 200, { post: publishedPost });
     return;
   }
@@ -111,6 +125,25 @@ async function fetchPage(pathname) {
   return { response, html: await response.text() };
 }
 
+async function requestRevalidation(status, signatureOverride) {
+  const timestamp = String(Date.now());
+  const eventId = randomUUID();
+  const body = JSON.stringify({ eventId, action: "post.changed", slug: "safe-post", status });
+  const signature = createHmac("sha256", revalidationSecret)
+    .update(`${timestamp}.${eventId}.${body}`)
+    .digest("base64url");
+  return fetch(new URL("/api/revalidate/blog", appOrigin), {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Rookhposh-Timestamp": timestamp,
+      "X-Rookhposh-Event-Id": eventId,
+      "X-Rookhposh-Signature": signatureOverride ?? signature,
+    },
+    body,
+  });
+}
+
 function extractJsonLd(html) {
   return [...html.matchAll(
     /<script[^>]+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi,
@@ -135,6 +168,7 @@ try {
       env: {
         ...process.env,
         BLOG_CONTENT_API_URL: cmsOrigin,
+        BLOG_REVALIDATION_SECRET: revalidationSecret,
         NEXT_PUBLIC_SITE_URL: "https://rookhposh.ir",
       },
       stdio: ["ignore", "ignore", "pipe"],
@@ -182,6 +216,27 @@ try {
   assert(feed.html.includes("عنوان مقاله آزمایشی"), "feed: published article is missing");
   assert(!feed.html.includes("draft-post"), "feed: draft article was included");
   assert(!feed.html.includes("noindex-post"), "feed: noindex article was included");
+
+  const invalidRevalidation = await requestRevalidation("PUBLISHED", "invalid");
+  assert(invalidRevalidation.status === 401, `revalidation: invalid signature expected 401, received ${invalidRevalidation.status}`);
+
+  cmsPublished = false;
+  const unpublishRevalidation = await requestRevalidation("DRAFT");
+  const unpublishedArticle = await fetchPage("/blog/safe-post");
+  const unpublishedIndex = await fetchPage("/blog");
+  const unpublishedSitemap = await fetchPage("/sitemap.xml");
+  const unpublishedFeed = await fetchPage("/feed.xml");
+  assert(unpublishRevalidation.status === 200, `revalidation: unpublish expected 200, received ${unpublishRevalidation.status}`);
+  assert(unpublishedArticle.response.status === 404, `unpublish: expected article 404, received ${unpublishedArticle.response.status}`);
+  assert(!unpublishedIndex.html.includes("safe-post"), "unpublish: article remained on Blog index");
+  assert(!unpublishedSitemap.html.includes("safe-post"), "unpublish: article remained in sitemap");
+  assert(!unpublishedFeed.html.includes("عنوان مقاله آزمایشی"), "unpublish: article remained in feed");
+
+  cmsPublished = true;
+  const publishRevalidation = await requestRevalidation("PUBLISHED");
+  const republishedArticle = await fetchPage("/blog/safe-post");
+  assert(publishRevalidation.status === 200, `revalidation: publish expected 200, received ${publishRevalidation.status}`);
+  assert(republishedArticle.response.status === 200, `republish: expected article 200, received ${republishedArticle.response.status}`);
 
   if (failures.length === 0) {
     console.log("Blog CMS fixture smoke validation passed.");

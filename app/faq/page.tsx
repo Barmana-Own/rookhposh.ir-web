@@ -5,9 +5,9 @@ import MarketingPageShell from "@/components/marketing/MarketingPageShell";
 import { createPageMetadata } from "@/lib/marketing";
 
 export const metadata: Metadata = createPageMetadata({
-  title: "سؤالات متداول پرو مجازی لباس",
+  title: "پاسخ پرسش‌های رایج درباره رخ پوش",
   description:
-    "پاسخ پرسش‌های اصلی درباره تصویر، انتخاب لباس، پیش‌نمایش و مقایسه در پرو مجازی رخ پوش.",
+    "پاسخ‌های کوتاه درباره تصویر ورودی، انتخاب لباس و پیش‌نمایش نتیجه رخ پوش.",
   path: "/faq",
 });
 
@@ -17,8 +17,8 @@ export default function FaqPage() {
       breadcrumb="سؤالات متداول"
       path="/faq"
       eyebrow="پاسخ‌های کوتاه"
-      title="درباره پرو مجازی رخ پوش"
-      description="پاسخ پرسش‌های اصلی درباره روند انتخاب تصویر، لباس و نتیجه نهایی."
+      title="پاسخ به پرسش‌های رایج"
+      description="پاسخ‌های کوتاه درباره شروع تجربه، انتخاب لباس و دیدن پیش‌نمایش نتیجه."
     >
       <section className="faq content-page__faq" aria-labelledby="faq-list-title">
         <div className="faq__intro">
@@ -26,8 +26,8 @@ export default function FaqPage() {
             پرسش‌های اصلی
           </h2>
           <p className="faq__lead fa-copy">
-            اگر پاسخ موردنظر خود را پیدا نکردید، از طریق داشبورد با تجربه رخ پوش
-            ادامه دهید.
+            پرسش‌های رایج درباره تصویر ورودی و انتخاب گزینه‌های لباس را یک‌جا
+            بخوانید.
           </p>
         </div>
         <FaqList />
@@ -39,9 +39,14 @@ export default function FaqPage() {
             مراحل پرو مجازی را ببینید
           </h2>
         </div>
-        <Link className="content-page__button fa-copy" href="/how-it-works">
-          مشاهده نحوه کار
-        </Link>
+        <div className="content-page__callout-actions">
+          <Link className="content-page__button fa-copy" href="/how-it-works">
+            مشاهده نحوه کار
+          </Link>
+          <Link className="content-page__button fa-copy" href="/blog">
+            مطالعه مقالات رخ پوش
+          </Link>
+        </div>
       </section>
     </MarketingPageShell>
   );

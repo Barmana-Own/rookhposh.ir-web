@@ -230,3 +230,37 @@ JSON-LD values are serialized with `<`, `>`, `&`, and line-separator escaping be
 The deterministic social-card route initially exposed an unsupported complex-font rendering failure during build; it was reduced to a reliable minimal brand card using supported text while preserving the 1200×630 output requirement. The failure was fixed and the production build passed.
 
 PROMPT_03_STATUS: PASS
+
+## Prompt 07 incremental integration review — 2026-09-29
+
+### Release verdict
+
+PASS for the repository-scoped CMS/public Blog integration. The public site consumes only validated published CMS data server-side, and the CMS emits authenticated cache-invalidation events. External deployment and a live MySQL-backed publish/unpublish test remain NOT_PERFORMED/NOT_RUN.
+
+### Implementation traceability
+
+| Requirement | Evidence | Result |
+| --- | --- | --- |
+| Separate applications | `docs/blog-content-provider.md`, CMS architecture and environment contracts | PASS |
+| Published-only public API | CMS `/api/public/posts` routes, `publishedAt <= now`, bounded pagination, public select | PASS |
+| Safe public rendering | `lib/blog/rich-document.ts`, `components/blog/BlogContent.tsx`, CMS projection | PASS |
+| CMS outage resilience | bounded server fetch and empty Blog state | PASS |
+| Authenticated revalidation | `app/api/revalidate/blog/route.ts`, CMS HMAC sender | PASS |
+| Sitemap/feed consistency | signed invalidation plus fixture checks for unpublish removal and republish visibility | PASS |
+| Secret isolation | server-only `.env.example` values; no browser token/header | PASS |
+| Homepage preservation | protected animation/pricing/dashboard review | PASS |
+
+### Validation evidence
+
+| Check | Status | Evidence |
+| --- | --- | --- |
+| Public source validation, lint, typecheck | PASS | `test:seo`, `test:r2`, `test:r3`, `test:r6`, `test:blog`, lint, typecheck |
+| Public production build | PASS | Next.js 16 build generated Blog and revalidation routes |
+| Public degraded-mode smoke | PASS | CMS unavailable/empty Blog, sitemap exclusion, missing-slug 404 |
+| Public CMS fixture integration | PASS | invalid signature 401; unpublish removes article/index/sitemap/feed; republish restores article |
+| Public revalidation smoke | PASS | invalid signature 401, valid signature 200 |
+| CMS clean install/audit/tests/build | PASS | 0 audit vulnerabilities; 9 tests; Prisma validation/build passed |
+| Live MySQL-backed integration | NOT_RUN | no authorized MySQL instance available |
+| External deployment and live cross-application verification | NOT_PERFORMED | deployment credentials/target were not supplied |
+
+PROMPT_07_STATUS: PASS_WITH_EXTERNAL_DEPLOYMENT_PENDING

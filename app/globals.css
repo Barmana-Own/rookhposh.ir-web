@@ -360,8 +360,11 @@ a {
   color: #0a0a0b;
 }
 
-.content-page__callout--compact .content-page__button + .content-page__button {
-  margin-inline-start: 0.5rem;
+.content-page__callout-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .content-page__pricing-grid {
@@ -2139,8 +2142,9 @@ a {
     width: 100%;
   }
 
-  .content-page__callout--compact .content-page__button + .content-page__button {
-    margin-inline-start: 0;
-    margin-top: 0.6rem;
+  .content-page__callout-actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
   }
 }

@@ -5,9 +5,9 @@ import PlanCards from "@/components/marketing/PlanCards";
 import { createPageMetadata } from "@/lib/marketing";
 
 export const metadata: Metadata = createPageMetadata({
-  title: "تعرفه پرو مجازی لباس برای فروشگاه‌ها",
+  title: "انتخاب پلن رخ پوش برای فروشگاه‌ها",
   description:
-    "پلن‌های آزمایشی، فصلی و سالانه رخ پوش با اعتبار و نرخ مشخص برای فروشگاه‌ها.",
+    "مدت دسترسی، اعتبار و نرخ هر پلن رخ پوش را برای فروشگاه‌ها بررسی کنید.",
   path: "/pricing",
 });
 
@@ -17,12 +17,12 @@ export default function PricingPage() {
       breadcrumb="تعرفه‌ها"
       path="/pricing"
       eyebrow="تعرفه‌های شفاف"
-      title="برای هر مرحله از رشد شما"
-      description="از اولین تجربه تا استفاده مداوم، پلنی را انتخاب کنید که با ریتم فروش شما هماهنگ است."
+      title="تعرفه و پلن‌های رخ پوش"
+      description="مدت دسترسی، اعتبار و نرخ هر پلن را پیش از انتخاب برای فروشگاه بررسی کنید."
     >
       <section className="content-page__section content-page__section--wide" aria-labelledby="plans-title">
         <h2 id="plans-title" className="visually-hidden">
-          پلن‌های رخ پوش
+          جزئیات پلن‌های قیمت‌گذاری رخ پوش
         </h2>
         <PlanCards />
       </section>
@@ -33,9 +33,14 @@ export default function PricingPage() {
             پاسخ پرسش‌های اصلی را بخوانید
           </h2>
         </div>
-        <Link className="content-page__button fa-copy" href="/faq">
-          مشاهده سؤالات متداول
-        </Link>
+        <div className="content-page__callout-actions">
+          <Link className="content-page__button fa-copy" href="/faq">
+            مشاهده سؤالات متداول
+          </Link>
+          <Link className="content-page__button fa-copy" href="/blog">
+            مطالعه مقالات رخ پوش
+          </Link>
+        </div>
       </section>
     </MarketingPageShell>
   );

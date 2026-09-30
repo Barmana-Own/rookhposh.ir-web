@@ -42,7 +42,7 @@ const structuredData = {
       name: "پرو مجازی لباس",
       serviceType: "پرو مجازی لباس برای فروشگاه‌ها",
       description:
-        "پیش‌نمایش هوشمند لباس روی تصویر مشتری برای مقایسه مدل، رنگ و اندازه پیش از خرید.",
+        "پیش‌نمایش لباس روی تصویر مشتری برای بررسی مدل و رنگ پیش از خرید.",
       provider: { "@id": `${SITE_ORIGIN}/#organization` },
       availableLanguage: ["fa-IR"],
     },

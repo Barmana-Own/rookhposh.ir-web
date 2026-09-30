@@ -76,7 +76,7 @@ export default function PublicFooter() {
             <span className="fa-copy">رخ‌پوش</span>
           </div>
           <p className="footer-about__description fa-copy">
-            رخ‌پوش، تجربه هوشمند پرو مجازی لباس؛ پلی میان انتخاب آنلاین و اطمینان واقعی.
+            رخ‌پوش، تجربه پرو مجازی لباس برای دیدن نتیجه انتخاب روی تصویر.
           </p>
           <a className="footer-about__phone ltr-copy" href="tel:+989037862349">
             09037862349

@@ -19,8 +19,11 @@ const requiredFiles = [
   "app/blog/page.tsx",
   "app/blog/[slug]/page.tsx",
   "app/feed.xml/route.ts",
+  "app/api/revalidate/blog/route.ts",
+  "lib/blog/revalidation.ts",
   "app/opengraph-image.tsx",
   "scripts/smoke-blog-fixture.mjs",
+  "scripts/smoke-revalidation.mjs",
   "docs/blog-content-provider.md",
 ];
 
@@ -43,8 +46,11 @@ for (const relativePath of [
   "components/seo/BlogPostingStructuredData.tsx",
   "components/seo/JsonLd.tsx",
   "app/feed.xml/route.ts",
+  "app/api/revalidate/blog/route.ts",
+  "lib/blog/revalidation.ts",
   "app/opengraph-image.tsx",
   "scripts/smoke-blog-fixture.mjs",
+  "scripts/smoke-revalidation.mjs",
   "app/sitemap.ts",
   ".env.example",
 ]) {
@@ -57,7 +63,7 @@ for (const relativePath of [
 
 const requiredMarkers = new Map([
   ["lib/blog/types.ts", ["id", "slug", "featuredImage", "publishedAt", "seoTitle", "noindex"]],
-  ["lib/blog/client.ts", ["BLOG_CONTENT_API_URL", "status", "published", "AbortController", "revalidate"]],
+  ["lib/blog/client.ts", ["BLOG_CONTENT_API_URL", "status", "published", "AbortController", "revalidate", "BLOG_PAGE_LIMIT", "MAX_BLOG_PAGES", "hasMore"]],
   ["lib/blog/repository.ts", ["getPublishedPosts", "getPublishedPostBySlug", "publishedAt", "noindex", "BLOG_SLUG_PATTERN"]],
   ["components/blog/BlogContent.tsx", ["react-markdown", "rehype-sanitize", "skipHtml"]],
   ["app/blog/page.tsx", ["getPublishedPosts", "generateMetadata", "BLOG_DESCRIPTION", "BlogProductCta"]],
@@ -65,8 +71,11 @@ const requiredMarkers = new Map([
   ["components/seo/BlogPostingStructuredData.tsx", ["BlogPosting", "datePublished", "dateModified", "publisher", "mainEntityOfPage", "fa-IR"]],
   ["components/seo/JsonLd.tsx", ["serializeJsonLd", "application/ld+json", "\\u003c"]],
   ["app/feed.xml/route.ts", ["application/rss+xml", "escapeXml", "getPublishedPosts", "guid", "pubDate"]],
+  ["app/api/revalidate/blog/route.ts", ["verifyBlogRevalidation", "revalidateTag", "revalidatePath", "MAX_REQUEST_BODY_BYTES"]],
+  ["lib/blog/revalidation.ts", ["timingSafeEqual", "MAX_CLOCK_SKEW_MS", "post.changed", "SLUG_PATTERN"]],
   ["app/opengraph-image.tsx", ["ImageResponse", "width: 1200", "height: 630"]],
   ["scripts/smoke-blog-fixture.mjs", ["BLOG_CONTENT_API_URL", "BlogPosting", "BreadcrumbList", "draft-post", "noindex-post"]],
+  ["scripts/smoke-revalidation.mjs", ["BLOG_REVALIDATION_SECRET", "invalid", "post.changed"]],
   ["app/sitemap.ts", ["getPublishedPosts", "noindex", "blogRoutes", "postRoutes"]],
   [".env.example", ["BLOG_CONTENT_API_URL"]],
 ]);

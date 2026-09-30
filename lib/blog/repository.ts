@@ -2,7 +2,9 @@ import { SITE_ORIGIN } from "@/lib/site";
 import {
   fetchBlogPostPayload,
   fetchBlogPostsPayload,
+  getBlogContentBaseUrl,
 } from "./client";
+import { parseBlogRichContent } from "./rich-document";
 import type { BlogAuthor, BlogImage, BlogPost } from "./types";
 
 const MAX_ID_LENGTH = 200;
@@ -35,7 +37,7 @@ function readOptionalText(value: unknown, maxLength: number) {
   return readText(value, maxLength);
 }
 
-function readSafeAssetUrl(value: unknown) {
+function readSafeAssetUrl(value: unknown, baseUrl?: URL) {
   const text = readText(value, 2_000);
 
   if (!text || text.startsWith("//")) {
@@ -43,7 +45,15 @@ function readSafeAssetUrl(value: unknown) {
   }
 
   if (text.startsWith("/")) {
-    return text;
+    if (!baseUrl) return text;
+    try {
+      const resolved = new URL(text, baseUrl);
+      return resolved.protocol === "https:" || (resolved.protocol === "http:" && baseUrl.protocol === "http:")
+        ? resolved.toString()
+        : null;
+    } catch {
+      return null;
+    }
   }
 
   try {
@@ -96,15 +106,26 @@ function readDate(value: unknown, { required }: { required: boolean }) {
   return date.toISOString();
 }
 
-function readImage(value: unknown): BlogImage | null {
+function readImage(value: unknown, baseUrl?: URL): BlogImage | null {
   if (!isRecord(value)) {
     return null;
   }
 
-  const url = readSafeAssetUrl(value.url);
+  const url = readSafeAssetUrl(value.url, baseUrl);
   const alt = readText(value.alt, 300);
 
   return url && alt ? { url, alt } : null;
+}
+
+function readCategory(value: unknown) {
+  if (typeof value === "string") return readOptionalText(value, MAX_CATEGORY_LENGTH);
+  if (isRecord(value)) return readOptionalText(value.name, MAX_CATEGORY_LENGTH);
+  return null;
+}
+
+function readOgImage(value: unknown, baseUrl?: URL) {
+  if (isRecord(value)) return readImage(value, baseUrl)?.url ?? null;
+  return readSafeAssetUrl(value, baseUrl);
 }
 
 function readAuthor(value: unknown): BlogAuthor | null {
@@ -142,7 +163,7 @@ function isPublishedPayload(record: Record<string, unknown>) {
   return true;
 }
 
-function parseBlogPost(value: unknown): BlogPost | null {
+function parseBlogPost(value: unknown, assetBaseUrl?: URL): BlogPost | null {
   if (!isRecord(value) || !isPublishedPayload(value)) {
     return null;
   }
@@ -155,7 +176,8 @@ function parseBlogPost(value: unknown): BlogPost | null {
   const publishedAt = readDate(value.publishedAt, { required: true });
   const updatedAt = readDate(value.updatedAt, { required: false });
   const noindex = value.noindex === undefined ? false : value.noindex;
-  const contentFormat = value.contentFormat ?? value.format;
+  const rawContentFormat = value.contentFormat ?? value.format;
+  const contentFormat = rawContentFormat === undefined ? "markdown" : rawContentFormat;
 
   if (
     !id ||
@@ -165,7 +187,7 @@ function parseBlogPost(value: unknown): BlogPost | null {
     !excerpt ||
     !content ||
     !publishedAt ||
-    (contentFormat !== undefined && contentFormat !== "markdown" && contentFormat !== "plain-text") ||
+    (contentFormat !== "markdown" && contentFormat !== "plain-text" && contentFormat !== "tiptap-json") ||
     typeof noindex !== "boolean"
   ) {
     return null;
@@ -175,14 +197,20 @@ function parseBlogPost(value: unknown): BlogPost | null {
     return null;
   }
 
+  if (contentFormat === "tiptap-json") {
+    const document = parseBlogRichContent(content);
+    if (!document) return null;
+  }
+
   return {
     id,
     slug,
     title,
     excerpt,
     content,
-    featuredImage: readImage(value.featuredImage),
-    category: readOptionalText(value.category, MAX_CATEGORY_LENGTH),
+    contentFormat,
+    featuredImage: readImage(value.featuredImage, assetBaseUrl),
+    category: readCategory(value.category),
     tags: readTags(value.tags),
     author: readAuthor(value.author),
     publishedAt,
@@ -192,7 +220,7 @@ function parseBlogPost(value: unknown): BlogPost | null {
     canonicalUrl: readCanonicalUrl(value.canonicalUrl),
     ogTitle: readOptionalText(value.ogTitle, MAX_TITLE_LENGTH),
     ogDescription: readOptionalText(value.ogDescription, 1_000),
-    ogImage: readSafeAssetUrl(value.ogImage),
+    ogImage: readOgImage(value.ogImage, assetBaseUrl),
     noindex,
   };
 }
@@ -241,8 +269,9 @@ function sortAndDedupe(posts: BlogPost[]) {
 
 export async function getPublishedPosts() {
   const payload = await fetchBlogPostsPayload();
+  const assetBaseUrl = getBlogContentBaseUrl() ?? undefined;
   const posts = extractPostValues(payload)
-    .map(parseBlogPost)
+    .map((post) => parseBlogPost(post, assetBaseUrl))
     .filter((post): post is BlogPost => Boolean(post));
 
   return sortAndDedupe(posts);
@@ -254,8 +283,9 @@ export async function getPublishedPostBySlug(slug: string) {
   }
 
   const payload = await fetchBlogPostPayload(slug);
+  const assetBaseUrl = getBlogContentBaseUrl() ?? undefined;
   const post = extractPostValues(payload)
-    .map(parseBlogPost)
+    .map((candidate) => parseBlogPost(candidate, assetBaseUrl))
     .find((candidate) => candidate?.slug === slug);
 
   return post ?? null;

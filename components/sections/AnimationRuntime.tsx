@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 
 const FRAME_COUNT = 535;
-const FRAME_ROOT = "/frames";
+const FRAME_ROOT = "/frames/v1";
 
 // The first 18 frames establish a usable opening sequence. Four settled frames
 // are enough to dismiss the loader; the remaining initial window continues in

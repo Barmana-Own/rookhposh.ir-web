@@ -1,67 +1,72 @@
-# گزارش تحویل مشتری — SEO مقاله و کشف Blog در Prompt 03
+# گزارش تحویل مشتری — برنامه خوشه محتوایی SEO در Prompt 11
 
 | مشخصه | مقدار |
 | --- | --- |
-| پروژه | رخ پوش / Rookhposh |
+| پروژه | سایت عمومی بازاریابی رخ پوش |
 | نوع گزارش | گزارش مشتری |
 | زبان | فارسی |
-| تاریخ جلالی | ۱۴۰۵-۰۷-۰۶ |
-| تاریخ میلادی | 2026-09-28 |
-| revision سورس | `800ba8932bddef0c45eaed9a1e2ec6abd987fccf` |
-| branch | `feature/r5-prompt-01-navigation` |
-| وضعیت تحویل | پیاده‌سازی سورس کامل؛ انتشار خارجی انجام نشده است |
+| تاریخ شمسی | ۱۴۰۵/۰۷/۰۸ |
+| تاریخ میلادی | ۲۰۲۶/۰۹/۳۰ |
+| revision سورس | `d0a78f2` به‌همراه تغییرات working tree مربوط به Prompt 04 و 07 |
+| وضعیت تحویل | QA سورس تکمیل؛ برنامه پژوهشی تحویل شد؛ استقرار خارجی انجام نشده است |
 
-## خلاصه مدیریتی
+## خلاصه اجرایی
 
-زیرساخت Blog عمومی first-party و لایه SEO/کشف مقاله روی دامنه `rookhposh.ir` تحویل شد، بدون تغییر در طراحی تأییدشده homepage، قیمت‌ها، مقصد dashboard یا تجربه انیمیشن ۵۳۵ فریمی.
+CMS مستقل رخ پوش از طریق API محتوای منتشرشده و فقط سمت سرور به Blog اول‌شخص روی `rookhposh.ir` متصل شد. صفحه اصلی، هویت بصری تأییدشده، قیمت‌ها، مقصد dashboard و انیمیشن ۵۳۵ فریمی حفظ شدند.
 
 ## قابلیت‌های تحویل‌شده
 
-- `/blog/` اکنون فهرست مقالات روی دامنه اصلی است.
-- `/blog/[slug]/` مقاله‌های منتشرشده را با عنوان، خلاصه، تصویر، نویسنده، تاریخ‌ها، بدنه، دسته‌بندی، برچسب‌ها، مطالب مرتبط و CTA زمینه‌ای محصول نمایش می‌دهد؛ فقط در صورت وجود این داده‌ها در منبع محتوا.
-- منبع محتوای عمومی و اختیاری از طریق `BLOG_CONTENT_API_URL` پشتیبانی می‌شود؛ CMS، ویرایشگر، database، authentication یا API نوشتن در این repository اضافه نشده است.
-- تا پیش از اتصال CMS، صفحه Blog حالت خالی واقعی دارد، مقاله جعلی تولید نمی‌کند، `noindex` است و در sitemap قرار نمی‌گیرد.
-- slugهای ناموجود، منتشرنشده، نامعتبر یا unavailable با 404 واقعی پاسخ می‌گیرند.
-- محتوای Markdown پیش از server rendering sanitize می‌شود و HTML خام غیرفعال است.
-- مقصد اصلی Blog در header/footer همچنان `/blog` است و `blog.rookhposh.ir` مقصد اصلی مقاله نیست.
+- سایت عمومی فقط محتوای معتبر و منتشرشده CMS را از طریق `BLOG_CONTENT_API_URL` می‌خواند.
+- API عمومی CMS صفحه‌بندی دارد و draft، یادداشت بازبینی، session، اطلاعات خصوصی کاربران، audit و credential ذخیره‌سازی را منتشر نمی‌کند.
+- محتوای Tiptap اعتبارسنجی و به‌صورت امن رندر می‌شود؛ مسیر Markdown قدیمی نیز sanitize شده و HTML خام در آن غیرفعال است.
+- قطعی CMS، timeout، پاسخ نامعتبر یا نبود configuration به empty state واقعی Blog منجر می‌شود و homepage را از کار نمی‌اندازد.
+- انتشار، ویرایش، لغو انتشار، archive یا تغییر slug می‌تواند revalidation امضاشده server-to-server برای مقاله، Blog، sitemap و RSS ایجاد کند.
+- احراز هویت نامعتبر revalidation رد می‌شود و secretها فقط در محیط سرور باقی می‌مانند.
 
-## موارد حفظ‌شده
-
-runtime انیمیشن تأییدشده، رفتار GSAP/ScrollTrigger، منطق canvas، فایل‌ها/ترتیب/تعداد فریم‌ها، ترکیب hero، قیمت‌ها، سبک برند و URL داشبورد تغییر نکردند. موجودی فریم همچنان ۵۳۵ فایل با حجم ۱۱٬۴۲۳٬۹۳۸ بایت است.
-
-## کیفیت و اعتبارسنجی
+## خلاصه اعتبارسنجی
 
 | بررسی | نتیجه |
 | --- | --- |
-| نصب dependency | PASS؛ `npm ci` و بدون آسیب‌پذیری گزارش‌شده |
-| lint | PASS |
-| TypeScript | PASS |
-| تست‌های سورس SEO/R2/R3 موجود | PASS |
-| تست سورس Blog | PASS |
-| build تولیدی | PASS |
-| smokeهای تولیدی SEO/R3/R4 موجود | PASS |
-| smoke حالت خالی Blog | PASS |
-| smoke با CMS آزمایشی | PASS؛ مقاله منتشرشده نمایش داده شد، draft حذف شد و script در خروجی نیامد |
-| fixture متادیتا و structured data مقاله | PASS؛ metadata مقاله، JSON-LDهای BlogPosting/BreadcrumbList، canonical و فیلدهای نویسنده/تاریخ بررسی شد |
-| fixture sitemap/feed پویا | PASS؛ محتوای published و indexable اضافه و draft/noindex حذف شد |
-| smoke RSS و social card | PASS؛ content type مربوط به RSS و PNG قطعی ۱۲۰۰×۶۳۰ بررسی شد |
-| پاک‌سازی هویت Organization | PASS؛ Blog قدیمی از `sameAs` حذف شد |
-| انتشار خارجی | NOT_PERFORMED |
+| typecheck و lint سایت عمومی | PASS |
+| validationهای SEO، R2، R3، R6 و Blog | PASS |
+| build تولیدی سایت عمومی | PASS |
+| fixture برای published/draft/noindex | PASS |
+| fixture انتشار/لغو انتشار/انتشار مجدد با revalidation امضاشده | PASS |
+| smoke احراز هویت revalidation | PASS؛ کدهای ۴۰۱ و ۲۰۰ |
+| typecheck، lint و تست‌های محتوایی/امنیتی CMS | PASS؛ ۹ تست |
+| audit وابستگی‌های CMS | PASS؛ صفر آسیب‌پذیری گزارش‌شده |
+| build CMS و اعتبارسنجی Prisma | PASS |
+| integration واقعی با MySQL | NOT_RUN؛ instance مجاز در دسترس نبود |
+| استقرار خارجی و بررسی DNS | NOT_PERFORMED |
 
-## نیاز عملیاتی باقی‌مانده
+## محدوده حفظ‌شده و محدودیت‌ها
 
-برای نمایش مقاله واقعی و indexable شدن Blog، URL تأییدشده CMS/API و محتوای منتشرشده لازم است. revision تأییدشده سورس نیز باید deploy و سپس روی دامنه واقعی دوباره بررسی شود؛ در این task Git push، تغییر DNS یا انتشار Production انجام نشده است.
+Animation runtime، رفتار GSAP/ScrollTrigger، canvas، فایل‌های frame، قیمت‌ها و احراز هویت dashboard تغییر نکردند. اتصال در سورس آماده است، اما استقرار واقعی به secretهای یکسان سمت سرور، CMS منتشرشده، MySQL مجاز، تنظیم storage رسانه و بررسی live endpointها نیاز دارد.
 
-## محدوده دقیق پیاده‌سازی
+## وضعیت تحویل
 
-این تغییر شامل routeها و componentهای Blog، boundary محتوای `lib/blog/`، metadata و JSON-LD مقاله، sitemap پویا، RSS escape‌شده در `/feed.xml`، social card قطعی `/opengraph-image` با ابعاد ۱۲۰۰×۶۳۰، لینک‌های داخلی زمینه‌ای، styleهای scoped، template محیطی اختیاری، تست‌های source/HTTP/fixture مربوط به Blog، به‌روزرسانی lockfile و مستندات فنی و وضعیت release است.
+هر دو repository شامل implementation و مستندات اعتبارسنجی هستند. استقرار و بررسی واقعی چرخه انتشار/لغو انتشار، اقدام عملیاتی خارج از این تغییر سورس است.
 
-## به‌روزرسانی تحویل Prompt 03
+## به‌روزرسانی کش در Prompt 08
 
-- هر مقاله منتشرشده اکنون fallbackهای معتبر SEO، canonical روی دامنه اصلی، فیلدهای Open Graph/Twitter مقاله، تاریخ انتشار/به‌روزرسانی، metadata نویسنده و رفتار `index/follow` یا `noindex` صریح دارد.
-- صفحه مقاله JSON-LD نوع `BlogPosting` را با ارجاع به Organization موجود رخ پوش و `BreadcrumbList` منطبق با breadcrumb قابل مشاهده تولید می‌کند.
-- `/sitemap.xml` به‌صورت request-time از CMS استفاده می‌کند، هنگام خطای provider routeهای ثابت بازاریابی را حفظ می‌کند و فقط محتوای published و indexable Blog را اضافه می‌کند.
-- `/feed.xml` یک RSS عمومی و escape‌شده فقط برای مقاله‌های published و indexable است. `/opengraph-image` یک PNG قطعی با ابعاد ۱۲۰۰×۶۳۰ ارائه می‌دهد.
-- صفحه «برای فروشگاه‌ها» اکنون به `/blog` لینک می‌دهد و Blog قدیمی به‌عنوان سیگنال هویت `sameAs` در Organization استفاده نمی‌شود.
+۵۳۵ فریم انیمیشن به مسیر نسخه‌دار `/frames/v1/` منتقل شدند تا مرورگر و CDN بتوانند آن‌ها را با cache یک‌ساله و immutable استفاده کنند. فایل‌ها، ترتیب، حجم بایت و signature محتوایی اندازه‌گیری‌شده یکسان باقی مانده‌اند و رفتار و ظاهر تأییدشده انیمیشن تغییر نکرده است.
 
-revision سورس به‌صورت محلی بررسی شده است. در این کار deploy خارجی، تغییر DNS، پیکربندی CMS یا ادعای index شدن زنده انجام نشده است. دامنه عمومی همچنان باید با این revision deploy و سپس دوباره بررسی شود.
+بررسی production server محلی موفقیت بارگذاری فریم اول، میانی و آخر و هدر cache مورد انتظار را تأیید کرد؛ مسیر قدیمی 404 می‌دهد. build، lint، typecheck، تست‌های SEO، R2، R3، R6، Blog و smoke کش موفق بودند؛ یک assertion قدیمی و نامرتبط در smoke مرورگر R6 خارج از محدوده این کار باقی مانده است. استقرار خارجی انجام نشده است.
+
+## آمادگی Search Console در Prompt 09
+
+سایت عمومی اکنون مسیر اختیاری و امنی برای verification گوگل دارد. وقتی مالک token واقعی HTML-tag مربوط به Search Console را از طریق متغیر server/build-only با نام `GOOGLE_SITE_VERIFICATION` ارائه کند، Next.js metadata verification را تولید می‌کند. وقتی متغیر وجود نداشته باشد یا معتبر نباشد، هیچ verification tag تولید نمی‌شود. token نمونه، شناسه analytics، metric Search Console، ادعای رتبه یا نتیجه indexing اضافه نشده است.
+
+مستند setup، ترجیح Domain property، روش HTML-tag، آدرس `https://rookhposh.ir/sitemap.xml`، بررسی‌های بعد از deployment و export آینده Queries/Pages را توضیح می‌دهد. build با متغیر خالی و با مقدار آزمایشی غیرتولیدی موفق شد. verification واقعی Search Console و metricها تا زمان ارائه دسترسی مالک یا export، NOT_RUN هستند.
+
+## gate کیفیت نهایی Prompt 10
+
+سایت عمومی و CMS مستقل، تست‌های خودکار و بررسی production محلی در دسترس را با موفقیت گذراندند. تجربه بصری تأییدشده homepage، چیدمان فارسی RTL، قیمت‌ها، مقصد dashboard و انیمیشن ۵۳۵ فریمی حفظ شدند. Blog محلی تا زمان اتصال محتوای منتشرشده empty state امن دارد؛ مقاله یا metric SEO ساختگی اضافه نشد.
+
+استقرار live، database مجاز CMS، دسترسی واقعی Search Console و بررسی سرویس‌های خارجی همچنان به اقدام operator نیاز دارند و تا آن زمان تحویل production کامل محسوب نمی‌شود.
+
+## برنامه پژوهشی Prompt 11
+
+برنامه خوشه محتوایی فارسی و مبتنی بر شواهد در `docs/seo-content-cluster-01.md` قرار دارد. این فایل هشت brief مقاله، تفکیک intent فروشگاه‌دار و مصرف‌کننده، نبود موجودی مقاله در محیط فعلی و drift استقرار live را ثبت می‌کند و evidence و تأییدهای لازم قبل از انتشار را مشخص می‌سازد. در این مرحله هیچ محتوایی تولید یا منتشر نشده است.
+
+داده Search Console و metricهای ابزار keyword در دسترس نیستند. ترتیب پیشنهادی با راهنمای ارزیابی برای فروشگاه، راهنمای factual آماده‌سازی تصویر و explainer دسته شروع می‌شود؛ آن هم پس از بررسی استقرار و ادعاهای محصول. عبارت‌های AI، fit، size، integration و نتایج تجاری تا زمان تأیید owner مجاز به انتشار نیستند.

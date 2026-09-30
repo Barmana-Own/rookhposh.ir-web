@@ -1,67 +1,72 @@
-# Customer Delivery Report — Prompt 03 Article SEO and Blog Discovery
+# Customer Delivery Report — Prompt 11 SEO Content Cluster Planning
 
 | Field | Value |
 | --- | --- |
-| Project | Rookhposh / رخ پوش |
+| Project | Rookhposh public marketing site |
 | Report type | Customer report |
 | Language | English |
-| Jalali date | ۱۴۰۵-۰۷-۰۶ |
-| Gregorian date | 2026-09-28 |
-| Source revision | `800ba8932bddef0c45eaed9a1e2ec6abd987fccf` |
-| Branch | `feature/r5-prompt-01-navigation` |
-| Delivery status | Source implementation complete; external deployment not performed |
+| Jalali date | ۱۴۰۵/۰۷/۰۸ |
+| Gregorian date | 2026-09-30 |
+| Source revision | `d0a78f2` plus uncommitted Prompt 04/07 working-tree changes |
+| Delivery status | Source QA complete; research plan delivered; external deployment not performed |
 
 ## Executive summary
 
-A first-party public Blog foundation and the article SEO/discovery layer were delivered on `rookhposh.ir` without changing the approved homepage design, pricing, dashboard destination, or 535-frame animation experience.
+The separate Rookhposh CMS is connected to the first-party Blog on `rookhposh.ir` through a server-only published-content API. The homepage, approved visual identity, pricing, dashboard destination, and 535-frame animation remain preserved.
 
 ## Delivered capabilities
 
-- `/blog/` is now the main-domain article index.
-- `/blog/[slug]/` supports server-rendered published articles with title, lead, image, author, dates, body, category, tags, related content, and product-context CTA when those facts are supplied by the content source.
-- The site can read published content from an optional public CMS/API configured with `BLOG_CONTENT_API_URL`; no CMS, editor, database, authentication, or write endpoint was added to this repository.
-- Before CMS connection, the site shows a truthful empty state, does not fabricate articles, marks the empty index `noindex`, and excludes it from the sitemap.
-- Missing, unpublished, invalid, or unavailable article slugs return a genuine 404.
-- Markdown article content is sanitized and raw HTML is disabled before server rendering.
-- The header/footer first-party Blog destination remains `/blog`; `blog.rookhposh.ir` is not used as the primary public article route.
+- The public site reads only validated, published CMS content through `BLOG_CONTENT_API_URL`.
+- The CMS public API is paginated and exposes no drafts, review notes, session data, private user fields, audit records, or storage credentials.
+- Tiptap article content is validated and safely rendered; the legacy Markdown path remains sanitized with raw HTML disabled.
+- CMS outages, timeouts, invalid responses, and missing configuration degrade to a truthful Blog empty state without taking down the homepage.
+- CMS publish, update, unpublish, archive, and slug changes can trigger signed server-to-server cache revalidation for the article, Blog index, sitemap, and RSS feed.
+- Invalid revalidation authorization is rejected and secrets remain server-only.
 
-## Preserved scope
-
-The approved animation runtime, GSAP/ScrollTrigger behavior, canvas logic, frame files/order/count, hero composition, pricing values, brand styling, and dashboard URL were not changed. The frame inventory remains 535 files totaling 11,423,938 bytes.
-
-## Quality and validation
+## Validation summary
 
 | Check | Result |
 | --- | --- |
-| Dependency installation | PASS; `npm ci`, 0 reported vulnerabilities |
-| Lint | PASS |
-| TypeScript | PASS |
-| Existing SEO/R2/R3 source checks | PASS |
-| Blog source check | PASS |
-| Production build | PASS |
-| Existing SEO/R3/R4 production smoke | PASS |
-| Blog empty-state smoke | PASS |
-| CMS fixture smoke | PASS; published content rendered, draft content excluded, script payload not emitted |
-| Article metadata/structured-data fixture | PASS; article metadata, BlogPosting/BreadcrumbList JSON-LD, canonical and author/date fields verified |
-| Dynamic sitemap/feed fixture | PASS; published indexable content included; drafts and noindex content excluded |
-| RSS and social-card smoke | PASS; escaped RSS content type and deterministic 1200×630 PNG verified |
-| Organization identity cleanup | PASS; old Blog subdomain removed from `sameAs` |
-| External deployment | NOT_PERFORMED |
+| Public typecheck and lint | PASS |
+| Public SEO, R2, R3, R6, and Blog source validation | PASS |
+| Public production build | PASS |
+| Published/draft/noindex fixture | PASS |
+| Publish/unpublish/republish fixture with signed revalidation | PASS |
+| Invalid/valid revalidation smoke | PASS; 401 / 200 |
+| CMS typecheck, lint, content/security tests | PASS; 9 tests |
+| CMS dependency audit | PASS; 0 vulnerabilities |
+| CMS production build and Prisma validation | PASS |
+| Live MySQL-backed CMS integration | NOT_RUN; no authorized MySQL instance |
+| External deployment/DNS verification | NOT_PERFORMED |
 
-## Remaining operational requirement
+## Preserved scope and limitations
 
-An approved CMS/API URL and published content are required before article pages can display real posts or become indexable. The verified source revision must also be deployed and the live host rechecked; no Git push, DNS change, or production deployment was performed in this task.
+No animation runtime, GSAP/ScrollTrigger behavior, canvas logic, frame assets, pricing values, or dashboard authentication was changed. The integration is ready in source, but production still requires matching server-only revalidation secrets, a deployed CMS/API, an authorized MySQL database, production media storage configuration, and live endpoint verification.
 
-## Exact implementation areas
+## Handover status
 
-The source change includes the first-party Blog routes and components, the `lib/blog/` content boundary, article metadata and JSON-LD, request-time sitemap generation, escaped RSS at `/feed.xml`, a deterministic `/opengraph-image` social card, contextual internal discovery links, scoped Blog styles, the optional environment template, Blog source/HTTP/fixture smoke checks, dependency lockfile updates, and the related technical/project documentation and release state files.
+Both repositories contain the implementation and validation documentation. Deployment and live publish/unpublish verification remain operational actions outside this source change.
 
-## Prompt 03 delivery update
+## Prompt 08 cache update
 
-- Each published article now receives validated SEO fallbacks, main-domain canonical metadata, article Open Graph/Twitter fields, publication/update dates, author metadata, and `index/follow` or explicit `noindex` behavior.
-- Article pages emit `BlogPosting` JSON-LD that references the existing Rookhposh Organization entity and a `BreadcrumbList` matching the visible breadcrumb.
-- `/sitemap.xml` is request-time CMS-aware, retains the static marketing routes during provider failure, and includes only published indexable Blog content.
-- `/feed.xml` is a public escaped RSS feed containing only published indexable articles. `/opengraph-image` returns a deterministic 1200×630 PNG large-card surface.
-- The store page now links to `/blog`, and the old external Blog host is no longer emitted as an Organization `sameAs` identity signal.
+The 535 animation frames were moved to a versioned `/frames/v1/` path so browsers and CDNs can safely reuse them for one year with immutable caching. The files, order, byte size, and measured content signature remain identical. The approved animation behavior and visual experience were not changed.
 
-The source revision is verified locally. No external deployment, DNS change, CMS configuration, or live indexing claim was made. The public host still requires deployment of this revision before production SEO behavior can be rechecked.
+The local production-server check confirmed the first, middle, and last versioned frames return successfully with the intended cache policy, while the old unversioned path returns 404. The build, lint, typecheck, SEO, R2, R3, R6, Blog, and cache smoke checks passed; one unrelated legacy R6 browser-smoke copy assertion remains outside this task. External deployment was not performed.
+
+## Prompt 09 Search Console readiness
+
+The public site now has an optional, deployment-safe Google verification configuration. When the owner supplies a real Search Console HTML-tag token through the server/build-only `GOOGLE_SITE_VERIFICATION` variable, Next.js emits the verification metadata. When the variable is absent or invalid, no verification tag is emitted. No placeholder token, analytics ID, Search Console metric, ranking claim, or indexing result was added.
+
+The owner/operator setup document covers Domain property preference, the HTML-tag fallback, `https://rookhposh.ir/sitemap.xml`, post-deployment checks, and future Queries/Pages exports. Local builds passed with the variable unset and with a non-production test value. Actual Search Console ownership verification and metrics remain NOT_RUN until owner-controlled access or an export is provided.
+
+## Prompt 10 final quality gate
+
+The public site and the separate CMS passed the available automated and local production checks. The approved homepage visual experience, Persian RTL layout, pricing, dashboard destination, and 535-frame animation remained intact. The local Blog safely shows an empty state until published content is connected; no fake article or SEO metric was added.
+
+Live deployment, an authorized CMS database, real Search Console access, and the remaining external service checks still require operator action before production publication is considered complete.
+
+## Prompt 11 research plan
+
+The evidence-based Persian content-cluster plan is available at `docs/seo-content-cluster-01.md`. It contains eight article briefs, separates store-owner and consumer intent, identifies the current empty article inventory and live deployment drift, and lists the evidence and owner approvals required before publication. It does not create or publish content.
+
+Search Console data and keyword-tool metrics are explicitly unavailable. The plan recommends starting with a store-owner evaluation guide, a factual image-preparation guide, and a category explainer only after the public deployment and product claims are verified. AI, fit, size, integration, and commercial-outcome statements remain subject to owner confirmation.

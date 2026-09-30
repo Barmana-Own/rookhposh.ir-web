@@ -23,11 +23,18 @@ const requiredFiles = [
   "components/blog/BlogContent.tsx",
   "app/not-found.tsx",
   "lib/site.ts",
+  ".env.example",
+  "docs/search-console-setup.md",
+  "scripts/validate-search-console.mjs",
+  "scripts/smoke-search-console.mjs",
   "scripts/smoke-seo.mjs",
 ];
 
 const requiredSnippets = new Map([
-  ["app/layout.tsx", ["metadataBase", "alternates", "openGraph", "twitter", "robots"]],
+  ["app/layout.tsx", ["metadataBase", "alternates", "openGraph", "twitter", "robots", "verification"]],
+  ["lib/site.ts", ["getGoogleSiteVerification", "GOOGLE_SITE_VERIFICATION_PATTERN"]],
+  [".env.example", ["GOOGLE_SITE_VERIFICATION="]],
+  ["docs/search-console-setup.md", ["https://rookhposh.ir/sitemap.xml", "NOT_AVAILABLE"]],
   ["app/robots.ts", ["MetadataRoute.Robots", "sitemap", "allow"]],
   ["app/sitemap.ts", ["MetadataRoute.Sitemap", "PUBLIC_INDEXABLE_ROUTES", "publicUrl"]],
   ["components/seo/StructuredData.tsx", ["JsonLd", '"@graph"', '"@type": "Organization"']],

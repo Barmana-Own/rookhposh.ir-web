@@ -1,4 +1,5 @@
 const DEFAULT_SITE_ORIGIN = "https://rookhposh.ir";
+const GOOGLE_SITE_VERIFICATION_PATTERN = /^[A-Za-z0-9_-]{8,256}$/;
 
 function resolveSiteOrigin(value: string | undefined) {
   if (!value) {
@@ -24,4 +25,10 @@ export const SITE_HOMEPAGE_URL = `${SITE_ORIGIN}/`;
 
 export const SITE_NAME = "رخ پوش";
 export const SITE_DESCRIPTION =
-  "رخ پوش، پرو مجازی لباس برای فروشگاه‌ها؛ تصویر و لباس را پیش از خرید کنار هم ببینید و با اطمینان بیشتری انتخاب کنید.";
+  "رخ پوش، پرو مجازی لباس برای فروشگاه‌ها؛ نتیجه انتخاب را روی تصویر مشتری پیش از خرید ببینید.";
+
+export function getGoogleSiteVerification() {
+  const value = process.env.GOOGLE_SITE_VERIFICATION?.trim();
+
+  return value && GOOGLE_SITE_VERIFICATION_PATTERN.test(value) ? value : undefined;
+}

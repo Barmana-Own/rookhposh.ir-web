@@ -112,7 +112,7 @@ export default async function BlogArticlePage({ params }: BlogArticlePageProps) 
           <BlogImage image={post.featuredImage} priority />
         ) : null}
 
-        <BlogContent content={post.content} />
+        <BlogContent content={post.content} contentFormat={post.contentFormat} />
 
         {post.tags.length > 0 ? (
           <footer className="blog-article__footer">

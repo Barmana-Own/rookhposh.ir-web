@@ -59,7 +59,7 @@ export default function OctabootExperience() {
                 انتخاب کنید
               </h2>
               <p className="panel__body fa-copy">
-                از میان مدل‌ها، رنگ‌ها و اندازه‌های موجود انتخاب کنید. رخ پوش
+                از میان مدل‌ها و رنگ‌های موجود انتخاب کنید. رخ پوش
                 گزینه انتخابی شما را برای اجرای پرو مجازی آماده می‌کند.
               </p>
               <p className="panel__spec fa-copy">
@@ -69,14 +69,14 @@ export default function OctabootExperience() {
 
             <article className="panel panel--left" data-panel="3" dir="rtl">
               <span className="panel__index">03</span>
-              <p className="panel__kicker fa-copy">پردازش هوشمند</p>
+              <p className="panel__kicker fa-copy">آماده‌سازی تصویر</p>
               <h2 className="panel__title fa-copy">
-                لباس، متناسب با
+                لباس روی
                 <br />
                 تصویر شما
               </h2>
               <p className="panel__spec fa-copy">
-                <i>فناوری</i> جانمایی هوشمند لباس روی تصویر
+                <i>فناوری</i> اجرای پرو مجازی روی تصویر
               </p>
             </article>
 
@@ -89,7 +89,7 @@ export default function OctabootExperience() {
                 خرید ببینید
               </h2>
               <p className="panel__spec fa-copy">
-                <i>وضوح</i> نمایش طبیعی فرم و جزئیات لباس
+                <i>نمایش</i> دیدن جزئیات لباس روی تصویر
               </p>
             </article>
 
@@ -99,10 +99,10 @@ export default function OctabootExperience() {
               <h2 className="panel__title fa-copy">
                 استایل‌ها را
                 <br />
-                کنار هم بسنجید
+                کنار هم ببینید
               </h2>
               <p className="panel__spec fa-copy">
-                <i>انتخاب</i> مقایسه مدل، رنگ و تناسب
+                <i>انتخاب</i> مقایسه مدل و رنگ
               </p>
             </article>
 
@@ -110,12 +110,12 @@ export default function OctabootExperience() {
               <span className="panel__index">06</span>
               <p className="panel__kicker fa-copy">جزئیات انتخاب</p>
               <h2 className="panel__title fa-copy">
-                رنگ و اندازه را
+                جزئیات لباس را
                 <br />
-                دقیق‌تر کنید
+                بررسی کنید
               </h2>
               <p className="panel__spec fa-copy">
-                <i>تنظیم</i> شخصی‌سازی انتخاب نهایی
+                <i>تنظیم</i> تکمیل انتخاب نهایی
               </p>
             </article>
 
@@ -123,16 +123,16 @@ export default function OctabootExperience() {
               <span className="panel__index">07</span>
               <p className="panel__kicker fa-copy">خرید مطمئن</p>
               <h2 className="panel__title fa-copy">
-                با اطمینان
+                انتخاب نهایی‌تان را
                 <br />
-                سفارش دهید
+                انجام دهید
               </h2>
               <p className="panel__body fa-copy">
                 وقتی انتخاب نهایی‌تان را پیدا کردید، با تصویری روشن از نتیجه،
-                خریدتان را با اطمینان کامل کنید.
+                انتخاب نهایی‌تان را انجام دهید.
               </p>
               <p className="panel__spec fa-copy">
-                <i>نتیجه</i> تصمیمی مطمئن، پیش از پرداخت
+                <i>نتیجه</i> بررسی نتیجه، پیش از پرداخت
               </p>
             </article>
 
@@ -161,7 +161,7 @@ export default function OctabootExperience() {
                 <span className="pricing-card__term fa-copy">۱ ماه دسترسی</span>
               </div>
               <p className="pricing-card__body fa-copy">
-                شروعی کم‌ریسک برای سنجش تجربه پرو مجازی در فروشگاه شما.
+                برای شروع تجربه پرو مجازی در فروشگاه شما.
               </p>
               <p className="pricing-card__price fa-copy">
                 <strong>۹۰۰,۰۰۰</strong>
@@ -188,7 +188,7 @@ export default function OctabootExperience() {
             </article>
 
             <article className="pricing-card pricing-card--featured" dir="rtl">
-              <span className="pricing-card__badge fa-copy">محبوب‌ترین</span>
+              <span className="pricing-card__badge fa-copy">انتخاب متعادل</span>
               <div className="pricing-card__header">
                 <div>
                   <p className="pricing-card__eyebrow fa-copy">پکیج</p>
@@ -291,8 +291,8 @@ export default function OctabootExperience() {
               <details className="faq__item">
                 <summary className="fa-copy">چه چیزهایی را می‌توانم انتخاب کنم؟</summary>
                 <p className="fa-copy">
-                  می‌توانید مدل، رنگ و اندازه لباس را انتخاب و گزینه‌های مختلف
-                  را با هم مقایسه کنید.
+                  می‌توانید مدل و رنگ لباس را انتخاب و گزینه‌های مختلف را با هم
+                  مقایسه کنید.
                 </p>
               </details>
               <details className="faq__item">

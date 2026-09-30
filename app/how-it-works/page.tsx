@@ -5,9 +5,9 @@ import StorySteps from "@/components/marketing/StorySteps";
 import { createPageMetadata } from "@/lib/marketing";
 
 export const metadata: Metadata = createPageMetadata({
-  title: "نحوه کار پرو مجازی لباس",
+  title: "مراحل استفاده از پرو مجازی لباس",
   description:
-    "از بارگذاری تصویر تا انتخاب لباس و دیدن نتیجه پیش از خرید؛ مراحل تجربه پرو مجازی رخ پوش را ببینید.",
+    "هفت مرحله تجربه رخ پوش را از بارگذاری تصویر تا دیدن پیش‌نمایش نتیجه مرور کنید.",
   path: "/how-it-works",
 });
 
@@ -17,8 +17,8 @@ export default function HowItWorksPage() {
       breadcrumb="نحوه کار"
       path="/how-it-works"
       eyebrow="مسیر پرو مجازی"
-      title="از تصویر تا انتخاب نهایی"
-      description="رخ پوش مسیر انتخاب لباس را از تصویر شما تا دیدن نتیجه پیش از خرید، در چند مرحله روشن توضیح می‌دهد."
+      title="مراحل پرو مجازی، از تصویر تا انتخاب"
+      description="رخ پوش مسیر بارگذاری تصویر، انتخاب لباس و دیدن پیش‌نمایش نتیجه را در چند مرحله توضیح می‌دهد."
     >
       <section className="content-page__section" aria-labelledby="steps-title">
         <p className="eyebrow eyebrow--center fa-copy">هفت مرحله روشن</p>
@@ -26,8 +26,8 @@ export default function HowItWorksPage() {
           تجربه‌ای که از انتخاب شروع می‌شود
         </h2>
         <p className="content-page__section-lead fa-copy">
-          تصویر واضح، انتخاب لباس و پیش‌نمایش نتیجه در کنار هم قرار می‌گیرند تا
-          مقایسه مدل، رنگ و اندازه پیش از خرید ساده‌تر باشد.
+          تصویر واضح، انتخاب لباس و پیش‌نمایش نتیجه در چند گام کنار هم قرار
+          می‌گیرند.
         </p>
         <StorySteps />
       </section>
@@ -39,9 +39,14 @@ export default function HowItWorksPage() {
             برای فروشگاه‌ها، مسیر انتخاب را روشن‌تر کنید
           </h2>
         </div>
-        <Link className="content-page__button fa-copy" href="/for-online-stores">
-          آشنایی با کاربرد برای فروشگاه‌ها
-        </Link>
+        <div className="content-page__callout-actions">
+          <Link className="content-page__button fa-copy" href="/for-online-stores">
+            آشنایی با کاربرد برای فروشگاه‌ها
+          </Link>
+          <Link className="content-page__button fa-copy" href="/blog">
+            مطالعه مقالات رخ پوش
+          </Link>
+        </div>
       </section>
     </MarketingPageShell>
   );
